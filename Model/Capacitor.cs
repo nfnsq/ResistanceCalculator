@@ -9,11 +9,19 @@ namespace Model
     /// </summary>
     public class Capacitor : IElement
     {
+        /// <summary>
+        /// Конструктор по умолчанию 
+        /// </summary>
         public Capacitor()
         {
 
         }
 
+        /// <summary>
+        /// Параметеризированный конструктор
+        /// </summary>
+        /// <param name="name">Имя элемента</param>
+        /// <param name="value">Значение емкости конденсатора</param>
         public Capacitor(string name, double value)
         {
             Name = name;
@@ -24,10 +32,10 @@ namespace Model
         /// </summary>
         public string Name { get; set; }
 
-        private double _value;
         /// <summary>
         /// Емкость конденсатора
         /// </summary>
+        private double _value;
         public double Value
         {
             get
@@ -36,12 +44,13 @@ namespace Model
             }
             set
             {
-
                 if (DataController.Validating(value))
                 {
-                    if (_value != value)
-                        ValueChanged?.Invoke(this);
-                    _value = value;
+                    if (value != _value)
+                    {
+                        _value = value;
+                        ValueChanged?.Invoke("Resistor value was changed.");
+                    }
                 }
                 else
                 {
@@ -59,12 +68,14 @@ namespace Model
         {
             try
             {
-                return -1 / (2 * Math.PI * frequence * Value);
+                return -1 / (2 * Math.PI * frequence * Value) * Complex.ImaginaryOne;
             }
             catch
             {
+#if !DEBUG
                 MessageBox.Show("Capacitor's Z calculating failure.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
                 return 0;
             }
         }

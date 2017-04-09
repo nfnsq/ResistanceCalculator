@@ -9,25 +9,34 @@ namespace Model
     /// </summary>
     public class Inductor : IElement
     {
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
         public Inductor()
         {
 
         }
 
+        /// <summary>
+        /// Параметризированный конструктор
+        /// </summary>
+        /// <param name="name">Имя элемента</param>
+        /// <param name="value">Значение индуктивности катушки</param>
         public Inductor(string name, double value)
         {
             Name = name;
             Value = value;
         }
+
         /// <summary>
         /// Уникальное имя катушки
         /// </summary>
         public string Name { get; set; }
 
-        private double _value;
         /// <summary>
         /// Индуктивность катушки
         /// </summary>
+        private double _value;
         public double Value
         {
             get
@@ -36,16 +45,13 @@ namespace Model
             }
             set
             {
-
                 if (DataController.Validating(value))
                 {
-                    if (_value != value)
-                        ValueChanged?.Invoke(this);
-                    _value = value;
-                }
-                else
-                {
-                    _value = 0;
+                    if (value != _value)
+                    {
+                        _value = value;
+                        ValueChanged?.Invoke("Resistor value was changed.");
+                    }
                 }
             }
         }
@@ -59,7 +65,7 @@ namespace Model
         {
             try
             {
-                return 2 * Math.PI * frequence * Value;
+                return 2 * Math.PI * frequence * Value * Complex.ImaginaryOne;
             }
             catch
             {

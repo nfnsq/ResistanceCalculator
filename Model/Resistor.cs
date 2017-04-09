@@ -9,10 +9,19 @@ namespace Model
     /// </summary>
     public class Resistor : IElement
     {
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
         public Resistor()
         {
 
         }
+
+        /// <summary>
+        /// Параметризированный конструктор
+        /// </summary>
+        /// <param name="name">Имя элемента</param>
+        /// <param name="value">Значение сопротивления резистора</param>
         public Resistor(string name, double value)
         {
             Value = value;
@@ -37,9 +46,11 @@ namespace Model
             {
                 if (DataController.Validating(value))
                 {
-                    if (_value != value)
-                        ValueChanged?.Invoke(this);
-                    _value = value;
+                    if (value != _value)
+                    {
+                        _value = value;
+                        ValueChanged?.Invoke("Resistor value was changed.");
+                    }
                 }
                 else
                 {
@@ -71,6 +82,5 @@ namespace Model
         /// Событие, определяющее изменение номинала резистора
         /// </summary>
         public event ValueChangedHandler ValueChanged;
-
     }
 }

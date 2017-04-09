@@ -51,8 +51,8 @@
             this._elementValue.Name = "_elementValue";
             this._elementValue.Size = new System.Drawing.Size(100, 20);
             this._elementValue.TabIndex = 1;
-            this._elementValue.TextChanged += new System.EventHandler(this._elementValue_TextChanged);
-            this._elementValue.Validating += new System.ComponentModel.CancelEventHandler(this.DataValidating);
+            this._elementValue.Validating += new System.ComponentModel.CancelEventHandler(this._elementValue_Validating);
+            this._elementValue.Validated += new System.EventHandler(this._elementValue_Validated);
             // 
             // ElementControl
             // 

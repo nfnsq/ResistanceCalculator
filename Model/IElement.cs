@@ -7,7 +7,7 @@ namespace Model
     /// <summary>
     /// Делегат, оторый возвращает void и принимает
     /// </summary>
-    public delegate void ValueChangedHandler(object sender);
+    public delegate void ValueChangedHandler(string msg);
 
     /// <summary>
     /// Сущность, описывающая элемент в электрической цепи

@@ -10,6 +10,9 @@ namespace Model
     /// </summary>
     public class Circuit
     {
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
         public Circuit()
         {
             Elements = new List<IElement>();
@@ -24,17 +27,17 @@ namespace Model
         /// </summary>
         /// <param name="frequencies"></param>
         /// <returns></returns>
-        public Complex[] CalculateZ(params double[] frequencies)
+        public Complex[] CalculateZ(List<double> frequencies)
         {
-            Complex[] _z = null;
+            Complex[] z = new Complex[frequencies.Count];
             try
             {
 
-                for (int i = 0; i < frequencies.Length; i++)
+                for (int i = 0; i < frequencies.Count; i++)
                 {
                     foreach (IElement element in Elements)
                     {
-                        _z[i] = _z[i] + element.CalculateZ(frequencies[i]);
+                        z[i] = z[i] + element.CalculateZ(frequencies[i]);
                     }
                 }
             }
@@ -43,17 +46,43 @@ namespace Model
                 MessageBox.Show("Circuit's calculating failure.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return _z;
+            return z;
         }
+
+        private Complex CalculateEquivalent(IElement element1, IElement element2, double frequence, bool connection)
+        {
+            Complex rEq = new Complex();
+            Complex r1 = element1.CalculateZ(frequence);
+            Complex r2 = element2.CalculateZ(frequence);
+
+            try
+            {
+                if (connection)
+                {
+                    rEq = r1 + r2;
+                }
+                else
+                {
+                    rEq = r1 * r2 / (r1 + r2);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error in calculating equivalent resistance", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return rEq;
+        }
+
 
         /// <summary>
         /// Событие, происходящее при изменении номиналов элементов в цепи
         /// </summary>
         public event ValueChangedHandler CircuitChanged;
 
-        public void ElementValueChanged(object sender)
+        public void ElementValueChanged(string msg)
         {
-            CircuitChanged?.Invoke(this);
+            CircuitChanged?.Invoke("Circuit changed. " + msg);
         }
     }
 }

@@ -1,19 +1,28 @@
-﻿using System.ComponentModel;
-using System.Windows.Forms;
-using Model;
+﻿using Model;
+using System;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace View
 {
+    /// <summary>
+    /// UserControl для ввода данных элемента
+    /// </summary>
     public partial class ElementControl : UserControl
     {
+        /// <summary>
+        /// Метод иициализирующий UserControl
+        /// </summary>
         public ElementControl()
         {
             InitializeComponent();
         }
 
         private IElement _object = null;
-
+        /// <summary>
+        /// Возвращает или устанавливает элемент в UserControl
+        /// </summary>
         public IElement Object
         {
             get
@@ -27,7 +36,6 @@ namespace View
                 if (_object != null)
                 {
                     _elementValue.Text = _object.Value.ToString();
-
                     Regex r = new Regex("R");
                     Regex c = new Regex("C");
                     Regex i = new Regex("L");
@@ -43,19 +51,10 @@ namespace View
                 }
             }
         }
-        private void DataValidating(object sender, CancelEventArgs e)
-        {
-            Regex regex = new Regex("^[0-9]+$");
-            if ((regex.IsMatch(((TextBox)sender).Text) != true) && (((TextBox)sender).Text != ""))
-            {
-                MessageBox.Show("Invalid data. Please, try again.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true;
-                ((TextBox)sender).Text = "";
-            }
-        }
-
-        private void _elementKind_SelectedIndexChanged(object sender, System.EventArgs e)
+        /// <summary>
+        /// Обработчик события SelectedIndexChanged
+        /// </summary>
+        private void _elementKind_SelectedIndexChanged(object sender, EventArgs e)
         {
             int key = _elementKind.SelectedIndex;
             switch (key)
@@ -80,9 +79,36 @@ namespace View
             _object.Value = double.Parse(_elementValue.Text);
         }
 
-        private void _elementValue_TextChanged(object sender, System.EventArgs e)
+        /// <summary>
+        /// Обработчик при проверке действительности элемента управления
+        /// </summary>
+        private void _elementValue_Validating(object sender, CancelEventArgs e)
         {
-            _object.Value = double.Parse(_elementValue.Text);
+            InputDataController.InputDataValidating(sender, e);
+        }
+
+        /// <summary>
+        /// Команды после упешной проверки корректности в элементе управления
+        /// </summary>
+        private void _elementValue_Validated(object sender, EventArgs e)
+        {
+            try
+            {
+                _object.Value = double.Parse(_elementValue.Text);
+            }
+            catch
+            {
+                if (_elementValue.Text == "")
+                {
+                    _object.Value = 0;
+                }
+                else
+                {
+                    MessageBox.Show("Parsing failure. Please, try again", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _elementValue.Text = "";
+                }
+            }
         }
     }
 }
