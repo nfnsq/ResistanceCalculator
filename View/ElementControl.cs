@@ -19,6 +19,8 @@ namespace View
             InitializeComponent();
         }
 
+        private int _inp;
+        private int _outp;
         private IElement _object = null;
         /// <summary>
         /// Возвращает или устанавливает элемент в UserControl
@@ -33,6 +35,9 @@ namespace View
             set
             {
                 _object = value;
+                _inp = value.In;
+                _outp = value.Out;
+
                 if (_object != null)
                 {
                     _elementValue.Text = _object.Value.ToString();
@@ -77,6 +82,8 @@ namespace View
                     break;
             }
             _object.Value = double.Parse(_elementValue.Text);
+            _object.In = _inp;
+            _object.Out = _outp;
         }
 
         /// <summary>

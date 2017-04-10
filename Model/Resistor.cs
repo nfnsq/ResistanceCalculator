@@ -22,10 +22,12 @@ namespace Model
         /// </summary>
         /// <param name="name">Имя элемента</param>
         /// <param name="value">Значение сопротивления резистора</param>
-        public Resistor(string name, double value)
+        public Resistor(string name, double value, int inp, int outp)
         {
             Value = value;
             Name = name;
+            In = inp;
+            Out = outp;
         }
         /// <summary>
         /// Уникальное имя резистора
@@ -59,6 +61,9 @@ namespace Model
             }
         }
 
+        public int In { get; set; }
+        public int Out { get; set; }
+
         /// <summary>
         /// Метод для расчета комплексного сопротивления резистора
         /// </summary>
@@ -72,8 +77,10 @@ namespace Model
             }
             catch
             {
+                #if !DEBUG
                 MessageBox.Show("Resistor's Z calculating failure.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                #endif
                 return 0;
             }
         }

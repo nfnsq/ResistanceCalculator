@@ -57,26 +57,26 @@ namespace View
             switch (circuitIndex)
             {
                 case 0:
-                    AddElement("R", 10);
-                    AddElement("C", 150);
+                    AddElement("R", 10, 1, 2);
+                    AddElement("C", 150, 1, 2);
                     break;
                 case 1:
-                    AddElement("R", 12);
-                    AddElement("L", 50);
+                    AddElement("R", 12, 1, 2);
+                    AddElement("L", 50, 2, 3);
                     break;
                 case 2:
-                    AddElement("C", 200);
-                    AddElement("L", 20);
+                    AddElement("C", 200, 1, 2);
+                    AddElement("L", 20, 2, 3);
                     break;
                 case 3:
-                    AddElement("R", 90);
-                    AddElement("C", 200);
-                    AddElement("L", 20);
+                    AddElement("R", 90, 1, 2);
+                    AddElement("C", 200, 2, 3);
+                    AddElement("L", 20, 3, 4);
                     break;
                 case 4:
-                    AddElement("R", 10);
-                    AddElement("R", 90);
-                    AddElement("C", 200);
+                    AddElement("R", 10, 1, 2);
+                    AddElement("R", 90, 2, 3);
+                    AddElement("C", 200, 3, 4);
                     break;
 
                 default:
@@ -91,23 +91,25 @@ namespace View
         /// <param name="name">Имя элемента</param>
         /// <param name="value">Номинальное значение</param>
         /// <param name="elementControl">UserControl в котором отобразится данные об элементе</param>
-        private void AddElement(string name, double value)
+        private void AddElement(string name, double value, int inp, int outp)
         {
             Regex r = new Regex("R");
             Regex c = new Regex("C");
             Regex i = new Regex("L");
 
             if (r.IsMatch(name))
-                _iElement = new Resistor(name, value);
+                _iElement = new Resistor(name, value, inp, outp);
 
             if (c.IsMatch(name))
-                _iElement = new Capacitor(name, value);
+                _iElement = new Capacitor(name, value, inp, outp);
 
             if (i.IsMatch(name))
-                _iElement = new Inductor(name, value);
+                _iElement = new Inductor(name, value, inp, outp);
 
             int index = elementContolList.Count;
             _iElement.Name = _iElement.Name + (index + 1).ToString();
+            _iElement.In = inp;
+            _iElement.Out = outp;
             _circuit.Elements.Add(_iElement);
 
             ElementControl elementControl = new ElementControl();
@@ -185,6 +187,7 @@ namespace View
         /// </summary>
         private void _dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            _mainWindowStatusStrip.Text = "";
             int r = e.RowIndex;
             int c = e.ColumnIndex;
             string cellValue = _dataGridView.Rows[r].Cells[c].FormattedValue.ToString();

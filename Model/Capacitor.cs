@@ -22,10 +22,12 @@ namespace Model
         /// </summary>
         /// <param name="name">Имя элемента</param>
         /// <param name="value">Значение емкости конденсатора</param>
-        public Capacitor(string name, double value)
+        public Capacitor(string name, double value, int inp, int outp)
         {
-            Name = name;
             Value = value;
+            Name = name;
+            In = inp;
+            Out = outp;
         }
         /// <summary>
         /// Уникальное имя конденсатора 
@@ -59,6 +61,9 @@ namespace Model
             }
         }
 
+        public int In { get; set; }
+        public int Out { get; set; }
+
         /// <summary>
         /// Метод для расчета комплексного сопротивления
         /// </summary>
@@ -72,10 +77,10 @@ namespace Model
             }
             catch
             {
-#if !DEBUG
+            #if !DEBUG
                 MessageBox.Show("Capacitor's Z calculating failure.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
+            #endif
                 return 0;
             }
         }

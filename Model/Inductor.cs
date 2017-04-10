@@ -22,10 +22,12 @@ namespace Model
         /// </summary>
         /// <param name="name">Имя элемента</param>
         /// <param name="value">Значение индуктивности катушки</param>
-        public Inductor(string name, double value)
+        public Inductor(string name, double value, int inp, int outp)
         {
-            Name = name;
             Value = value;
+            Name = name;
+            In = inp;
+            Out = outp;
         }
 
         /// <summary>
@@ -56,6 +58,8 @@ namespace Model
             }
         }
 
+        public int In { get; set; }
+        public int Out { get; set; }
         /// <summary>
         /// Метод для расчета комплексного сопротивления катушки
         /// </summary>
@@ -69,8 +73,11 @@ namespace Model
             }
             catch
             {
+                #if !DEBUG
                 MessageBox.Show("Inductor's Z calculating failure.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                #endif
+
                 return 0;
             }
         }

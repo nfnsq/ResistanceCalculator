@@ -24,6 +24,9 @@ namespace Model
         /// </summary>
         double Value { get; set; }
 
+        int In { get; set; }
+        int Out { get; set; }
+
         /// <summary>
         /// Метод возвращает значение комплексного сопротивления элемента в цепи
         /// </summary>
