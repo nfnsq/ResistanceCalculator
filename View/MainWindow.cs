@@ -27,62 +27,10 @@ namespace View
         public MainWindow()
         {
             InitializeComponent();
-            _dataGridView.Columns.Add("Frequence", "freq");
-            _dataGridView.Columns.Add("Resistance", "res");
-            _dataGridView.Columns["Resistance"].ReadOnly = true;
             _dataGridView.Columns["Resistance"].ValueType = Type.GetType("System.Double");
             _dataGridView.Rows.Add();
             _circuit = new Circuit();
             _circuit.CircuitChanged += _circuit_CircuitChanged;
-        }
-
-        /// <summary>
-        /// Обработчик при изменении свойства SelectedIndex
-        /// </summary>
-        private void _circuitKind_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _mainWindowStatusStrip.Text = "Enter a frequence.";
-            _dataGridView.Enabled = true;
-
-            int circuitIndex = _circuitKind.SelectedIndex;
-
-            foreach (ElementControl ec in elementContolList)
-            {
-                Controls.Remove(ec);
-                ec.Dispose();
-            }
-            elementContolList.Clear();
-            _circuit.Elements.Clear();
-
-            switch (circuitIndex)
-            {
-                case 0:
-                    AddElement("R", 10, 1, 2);
-                    AddElement("C", 150, 1, 2);
-                    break;
-                case 1:
-                    AddElement("R", 12, 1, 2);
-                    AddElement("L", 50, 2, 3);
-                    break;
-                case 2:
-                    AddElement("C", 200, 1, 2);
-                    AddElement("L", 20, 2, 3);
-                    break;
-                case 3:
-                    AddElement("R", 90, 1, 2);
-                    AddElement("C", 200, 2, 3);
-                    AddElement("L", 20, 3, 4);
-                    break;
-                case 4:
-                    AddElement("R", 10, 1, 2);
-                    AddElement("R", 90, 2, 3);
-                    AddElement("C", 200, 3, 4);
-                    break;
-
-                default:
-
-                    break;
-            }
         }
 
         /// <summary>
@@ -120,7 +68,7 @@ namespace View
             elementControl.Name = "elementControl" + index.ToString();
             elementControl.Object = _iElement;
             elementControl.Visible = true;
-            elementControl.Size = new Size(235, 27);
+            elementControl.Size = new Size(416, 27);
             elementControl.TabIndex = _dataGridView.TabIndex + index + 1;
             elementControl.Object.ValueChanged += _circuit.ElementValueChanged;
 
@@ -224,6 +172,62 @@ namespace View
                 MessageBox.Show("Calculating failure.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        
+        private void NewCircuit()
+        {
+            _mainWindowStatusStrip.Text = "Enter a frequence.";
+            _dataGridView.Enabled = true;
+
+            foreach (ElementControl ec in elementContolList)
+            {
+                Controls.Remove(ec);
+                ec.Dispose();
+            }
+            elementContolList.Clear();
+            _circuit.Elements.Clear();
+        }
+
+        private void toolStripMenuItem2_Click_1(object sender, EventArgs e)
+        {
+            NewCircuit();
+            _countOfElementView.Value = 2;
+            AddElement("R", 10, 1, 2);
+            AddElement("C", 150, 1, 2);
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            NewCircuit();
+            _countOfElementView.Value = 2;
+            AddElement("R", 12, 1, 2);
+            AddElement("L", 50, 2, 3);
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            NewCircuit();
+            _countOfElementView.Value = 2;
+            AddElement("C", 200, 1, 2);
+            AddElement("L", 20, 2, 3);
+        }
+
+        private void toolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            NewCircuit();
+            _countOfElementView.Value = 3;
+            AddElement("R", 90, 1, 2);
+            AddElement("C", 200, 2, 3);
+            AddElement("L", 20, 3, 4);
+        }
+
+        private void toolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            NewCircuit();
+            _countOfElementView.Value = 3;
+            AddElement("R", 10, 1, 2);
+            AddElement("R", 90, 2, 3);
+            AddElement("C", 200, 3, 4);
         }
     }
 }
