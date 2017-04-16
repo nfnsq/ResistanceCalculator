@@ -35,10 +35,10 @@ namespace Model
         /// </summary>
         public string Name { get; set; }
 
+        private double _value;
         /// <summary>
         /// Индуктивность катушки
         /// </summary>
-        private double _value;
         public double Value
         {
             get
@@ -58,8 +58,16 @@ namespace Model
             }
         }
 
+        /// <summary>
+        /// Номер узла, откуда ток приходит
+        /// </summary>
         public int In { get; set; }
+        
+        /// <summary>
+        /// Номер узла, куда ток уходит
+        /// </summary>
         public int Out { get; set; }
+        
         /// <summary>
         /// Метод для расчета комплексного сопротивления катушки
         /// </summary>
@@ -85,6 +93,6 @@ namespace Model
         /// <summary>
         /// Событие, определяющее изменение номинала катушки
         /// </summary>
-        public event ValueChangedHandler ValueChanged;
+        public event UserDelegate ValueChanged;
     }
 }

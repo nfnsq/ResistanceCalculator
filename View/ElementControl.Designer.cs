@@ -30,9 +30,11 @@
         {
             this._elementKind = new System.Windows.Forms.ComboBox();
             this._elementValue = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this._nodeIn = new System.Windows.Forms.TextBox();
             this.valueLabel = new System.Windows.Forms.Label();
             this._nodesDirectionLabel = new System.Windows.Forms.Label();
+            this._nodeOut = new System.Windows.Forms.TextBox();
+            this.nodeOutLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // _elementKind
@@ -51,18 +53,24 @@
             // _elementValue
             // 
             this._elementValue.Location = new System.Drawing.Point(170, 3);
+            this._elementValue.MaxLength = 8;
             this._elementValue.Name = "_elementValue";
             this._elementValue.Size = new System.Drawing.Size(61, 20);
             this._elementValue.TabIndex = 1;
-            this._elementValue.Validating += new System.ComponentModel.CancelEventHandler(this._elementValue_Validating);
-            this._elementValue.Validated += new System.EventHandler(this._elementValue_Validated);
+            this._elementValue.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
+            this._elementValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxValidating);
+            this._elementValue.Validated += new System.EventHandler(this.TextBoxValidated);
             // 
-            // textBox1
+            // _nodeIn
             // 
-            this.textBox1.Location = new System.Drawing.Point(351, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(56, 20);
-            this.textBox1.TabIndex = 2;
+            this._nodeIn.Location = new System.Drawing.Point(339, 3);
+            this._nodeIn.MaxLength = 2;
+            this._nodeIn.Name = "_nodeIn";
+            this._nodeIn.Size = new System.Drawing.Size(18, 20);
+            this._nodeIn.TabIndex = 2;
+            this._nodeIn.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
+            this._nodeIn.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxValidating);
+            this._nodeIn.Validated += new System.EventHandler(this.TextBoxValidated);
             // 
             // valueLabel
             // 
@@ -78,17 +86,39 @@
             this._nodesDirectionLabel.AutoSize = true;
             this._nodesDirectionLabel.Location = new System.Drawing.Point(237, 6);
             this._nodesDirectionLabel.Name = "_nodesDirectionLabel";
-            this._nodesDirectionLabel.Size = new System.Drawing.Size(108, 13);
+            this._nodesDirectionLabel.Size = new System.Drawing.Size(102, 13);
             this._nodesDirectionLabel.TabIndex = 4;
-            this._nodesDirectionLabel.Text = "Nodes direction (a, b)";
+            this._nodesDirectionLabel.Text = "Nodes direction, In -";
+            // 
+            // _nodeOut
+            // 
+            this._nodeOut.Location = new System.Drawing.Point(393, 3);
+            this._nodeOut.MaxLength = 2;
+            this._nodeOut.Name = "_nodeOut";
+            this._nodeOut.Size = new System.Drawing.Size(18, 20);
+            this._nodeOut.TabIndex = 5;
+            this._nodeOut.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
+            this._nodeOut.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxValidating);
+            this._nodeOut.Validated += new System.EventHandler(this.TextBoxValidated);
+            // 
+            // nodeOutLabel
+            // 
+            this.nodeOutLabel.AutoSize = true;
+            this.nodeOutLabel.Location = new System.Drawing.Point(363, 6);
+            this.nodeOutLabel.Name = "nodeOutLabel";
+            this.nodeOutLabel.Size = new System.Drawing.Size(30, 13);
+            this.nodeOutLabel.TabIndex = 6;
+            this.nodeOutLabel.Text = "Out -";
             // 
             // ElementControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.nodeOutLabel);
+            this.Controls.Add(this._nodeOut);
             this.Controls.Add(this._nodesDirectionLabel);
             this.Controls.Add(this.valueLabel);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this._nodeIn);
             this.Controls.Add(this._elementValue);
             this.Controls.Add(this._elementKind);
             this.Name = "ElementControl";
@@ -102,8 +132,10 @@
 
         private System.Windows.Forms.ComboBox _elementKind;
         private System.Windows.Forms.TextBox _elementValue;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox _nodeIn;
         private System.Windows.Forms.Label valueLabel;
         private System.Windows.Forms.Label _nodesDirectionLabel;
+        private System.Windows.Forms.TextBox _nodeOut;
+        private System.Windows.Forms.Label nodeOutLabel;
     }
 }

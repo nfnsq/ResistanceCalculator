@@ -11,6 +11,7 @@ namespace View
     /// </summary>
     public partial class ElementControl : UserControl
     {
+        private IElement _object = null;
         /// <summary>
         /// Метод иициализирующий UserControl
         /// </summary>
@@ -19,9 +20,6 @@ namespace View
             InitializeComponent();
         }
 
-        private int _inp;
-        private int _outp;
-        private IElement _object = null;
         /// <summary>
         /// Возвращает или устанавливает элемент в UserControl
         /// </summary>
@@ -35,12 +33,13 @@ namespace View
             set
             {
                 _object = value;
-                _inp = value.In;
-                _outp = value.Out;
 
                 if (_object != null)
                 {
                     _elementValue.Text = _object.Value.ToString();
+                    _nodeIn.Text = _object.In.ToString();
+                    _nodeOut.Text = _object.Out.ToString();
+
                     Regex r = new Regex("R");
                     Regex c = new Regex("C");
                     Regex i = new Regex("L");
@@ -56,6 +55,7 @@ namespace View
                 }
             }
         }
+        
         /// <summary>
         /// Обработчик события SelectedIndexChanged
         /// </summary>
@@ -82,26 +82,62 @@ namespace View
                     break;
             }
             _object.Value = double.Parse(_elementValue.Text);
-            _object.In = _inp;
-            _object.Out = _outp;
-        }
+            _object.In = int.Parse(_nodeIn.Text);
+            _object.Out = int.Parse(_nodeOut.Text);
+            ObjectChanged?.Invoke("yaaaay");
 
+        }
+        
         /// <summary>
         /// Обработчик при проверке действительности элемента управления
         /// </summary>
-        private void _elementValue_Validating(object sender, CancelEventArgs e)
-        {
-            InputDataController.InputDataValidating(sender, e);
-        }
-
-        /// <summary>
-        /// Команды после упешной проверки корректности в элементе управления
-        /// </summary>
-        private void _elementValue_Validated(object sender, EventArgs e)
+        private void TextBoxValidating(object sender, CancelEventArgs e)
         {
             try
             {
-                _object.Value = double.Parse(_elementValue.Text);
+                int a = int.Parse(_nodeIn.Text);
+                int b = int.Parse(_nodeOut.Text);
+                if (InputDataController.InputDataValidating(((TextBox)sender).Text)
+                && (a != b) && (a < b))
+                {
+                    e.Cancel = false;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid data, try again.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ((TextBox)sender).Text = "";
+                    e.Cancel = true;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Parsing failure.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        /// <summary>
+        /// Обработчик упешной проверки корректности в элементе управления
+        /// </summary>
+        private void TextBoxValidated(object sender, EventArgs e)
+        {
+            try
+            {
+                if (((TextBox)sender).Name == "_elementValue")
+                {
+                    _object.Value = double.Parse(((TextBox)sender).Text);
+                    ObjectChanged?.Invoke("wooow");
+                }
+                if (((TextBox)sender).Name == "_nodeIn")
+                {
+                    _object.In = int.Parse(((TextBox)sender).Text);
+                }
+                if (((TextBox)sender).Name == "_nodeOut")
+                {
+                    _object.Out = int.Parse(((TextBox)sender).Text);
+                }
             }
             catch
             {
@@ -117,5 +153,21 @@ namespace View
                 }
             }
         }
+
+        /// <summary>
+        /// Обработчик при изменении значения свойства Text элемента TextBox
+        /// </summary>
+        private void TextBoxTextChanged(object sender, EventArgs e)
+        {
+            if (!InputDataController.InputDataValidating(((TextBox)sender).Text))
+            {
+                ((TextBox)sender).Text = "";
+            }
+        }
+        
+        /// <summary>
+        /// Событие, определяющее изменение элемента в цепи
+        /// </summary>
+        public event UserDelegate ObjectChanged;
     }
 }

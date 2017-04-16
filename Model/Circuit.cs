@@ -68,7 +68,7 @@ namespace Model
                                 {
                                     int p = A[j].IndexOf(-1);
                                     int q = A[j].IndexOf(1);
-                                    //замена первоого элемента на экивалентную
+                                    //замена первого элемента на экивалентную
                                     z[p] = CalculateEquivalent(z[p], z[q], frequencies[f], true);
 
                                     //удаление второго элемента
@@ -127,7 +127,7 @@ namespace Model
         }
 
         /// <summary>
-        /// Метод рассчитывает сумму в столбце матрицы
+        /// Метод рассчитывает сумму элементов в столбце матрицы
         /// </summary>
         /// <param name="j">Номер столбца</param>
         /// <param name="A">Матрица</param>
@@ -219,12 +219,12 @@ namespace Model
         /// <summary>
         /// Событие, происходящее при изменении номиналов элементов в цепи
         /// </summary>
-        public event ValueChangedHandler CircuitChanged;
+        public event UserDelegate CircuitChanged;
 
         /// <summary>
         /// Обработчик события ValueChaned
         /// </summary>
-        public void ElementValueChanged(string msg)
+        public void ElementChanged(string msg)
         {
             CircuitChanged?.Invoke("Circuit changed. " + msg);
         }

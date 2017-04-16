@@ -19,7 +19,8 @@ namespace View
         private Circuit _circuit;
         private List<double> _frequences = new List<double>();
         private Complex[] _z;
-        private List<ElementControl> elementContolList = new List<ElementControl>();
+        private List<ElementControl> _elementContolList = new List<ElementControl>();
+        private decimal _countOfElements = 0;
 
         /// <summary>
         /// Инициализация главного окна
@@ -54,39 +55,53 @@ namespace View
             if (i.IsMatch(name))
                 _iElement = new Inductor(name, value, inp, outp);
 
-            int index = elementContolList.Count;
+            int index = _elementContolList.Count;
+
             _iElement.Name = _iElement.Name + (index + 1).ToString();
             _iElement.In = inp;
             _iElement.Out = outp;
             _circuit.Elements.Add(_iElement);
 
             ElementControl elementControl = new ElementControl();
-            this._groupBox.Controls.Add(elementControl);
+            elementControl.ObjectChanged += _circuit.ElementChanged;
+            this._elementsPanel.Controls.Add(elementControl);
             
             int delta = 33;
-            elementControl.Location = new Point(6, 40 + delta * index);
+
+            elementControl.Location = new Point(6, 5 + delta * index);
             elementControl.Name = "elementControl" + index.ToString();
             elementControl.Object = _iElement;
             elementControl.Visible = true;
             elementControl.Size = new Size(416, 27);
             elementControl.TabIndex = _dataGridView.TabIndex + index + 1;
-            elementControl.Object.ValueChanged += _circuit.ElementValueChanged;
+            elementControl.Object.ValueChanged += _circuit.ElementChanged;
 
-            elementContolList.Add(elementControl);
+            _elementContolList.Add(elementControl);
+
             _circuit_CircuitChanged("Added new element");
-            Binding bind = new Binding("Text", _iElement, "Value");
-            elementControl.DataBindings.Add(bind);
+
+        }
+
+        /// <summary>
+        /// Метод удаляет последний в списке элемент из схемы
+        /// </summary>
+        private void RemoveElement()
+        {
+            int index = _circuit.Elements.Count - 1;
+            _circuit.Elements.RemoveAt(index);
+            _elementContolList.RemoveAt(index);
+            _elementsPanel.Controls.RemoveAt(index);
+            _circuit_CircuitChanged("removed");
         }
 
         /// <summary>
         /// Обработчик при изменении схемы
         /// </summary>
-        /// <param name="msg"></param>
         private void _circuit_CircuitChanged(string msg)
         {
-            for (int i = 0; i < elementContolList.Count; i++)
+            for (int i = 0; i < _elementContolList.Count; i++)
             {
-                _circuit.Elements[i] = elementContolList[i].Object;
+                _circuit.Elements[i] = _elementContolList[i].Object;
             }
             _mainWindowStatusStrip.Text = "Circuit changed";
 
@@ -99,6 +114,7 @@ namespace View
                 }
             }
             _z = _circuit.CalculateZ(_frequences);
+
             foreach (DataGridViewRow row in _dataGridView.Rows)
             {
                 if (row.Cells[0].Value != null)
@@ -117,17 +133,32 @@ namespace View
             if (e.ColumnIndex == 0)
             {
                 DataGridViewCell cell = ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex];
-                InputDataController.InputDataValidating(cell, e);
+                string text = cell.EditedFormattedValue.ToString();
+                if (InputDataController.InputDataValidating(text))
+                {
+                    e.Cancel = false;
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
         /// <summary>
-        /// Обработчик при изменении значения номинала элемента
+        /// Обработчик при изменении значения ячейки _dataGridView
         /// </summary>
-        /// <param name="msg"></param>
-        public void _object_ValueChanged(string msg)
+        private void _dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            _mainWindowStatusStrip.Text = msg;
+            if ((e.ColumnIndex == 0) && ((DataGridView)sender).RowCount != 0)
+            {
+                DataGridViewCell cell = ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex];
+                string text = cell.EditedFormattedValue.ToString();
+                if (!InputDataController.InputDataValidating(text))
+                {
+                    cell.Value = "";
+                }
+            }
         }
 
         /// <summary>
@@ -173,61 +204,93 @@ namespace View
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
-        private void NewCircuit()
+
+        /// <summary>
+        /// Метод очищает панель контролов и удаляет все элементы в цепи
+        /// </summary>
+        private void ClearPanel()
         {
             _mainWindowStatusStrip.Text = "Enter a frequence.";
             _dataGridView.Enabled = true;
 
-            foreach (ElementControl ec in elementContolList)
+            foreach (ElementControl ec in _elementContolList)
             {
                 Controls.Remove(ec);
                 ec.Dispose();
             }
-            elementContolList.Clear();
+            _elementContolList.Clear();
             _circuit.Elements.Clear();
         }
 
-        private void toolStripMenuItem2_Click_1(object sender, EventArgs e)
+        /// <summary>
+        /// Метод создает схему выбранный из 5 готовых
+        /// </summary>
+        private void LoadCircuit(object sender, EventArgs e)
         {
-            NewCircuit();
-            _countOfElementView.Value = 2;
-            AddElement("R", 10, 1, 2);
-            AddElement("C", 150, 1, 2);
+            ClearPanel();
+            _countOfElementView.Enabled = false;
+            if (((ToolStripMenuItem)sender).Name == "_circuit1")
+            {
+                _countOfElementView.Value = 2;
+                AddElement("R", 10, 1, 2);
+                AddElement("C", 150, 1, 2);
+            }
+            if (((ToolStripMenuItem)sender).Name == "_circuit2")
+            {
+                _countOfElementView.Value = 2;
+                AddElement("R", 12, 1, 2);
+                AddElement("L", 50, 2, 3);
+            }
+            if (((ToolStripMenuItem)sender).Name == "_circuit3")
+            {
+                _countOfElementView.Value = 2;
+                AddElement("C", 200, 1, 2);
+                AddElement("L", 20, 2, 3);
+            }
+            if (((ToolStripMenuItem)sender).Name == "_circuit4")
+            {
+                _countOfElementView.Value = 3;
+                AddElement("R", 90, 1, 2);
+                AddElement("C", 200, 2, 3);
+                AddElement("L", 20, 3, 4);
+            }
+            if (((ToolStripMenuItem)sender).Name == "_circuit5")
+            {
+                _countOfElementView.Value = 3;
+                AddElement("R", 10, 1, 2);
+                AddElement("R", 90, 2, 3);
+                AddElement("C", 200, 3, 4);
+            }
         }
 
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Метод для создания пользовательской схемы
+        /// </summary>
+        private void CreateCircuit(object sender, EventArgs e)
         {
-            NewCircuit();
-            _countOfElementView.Value = 2;
-            AddElement("R", 12, 1, 2);
-            AddElement("L", 50, 2, 3);
+            ClearPanel();
+            _countOfElementView.Value = 0;
+            _countOfElementView.Enabled = true;
         }
 
-        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Обрабочик при изменении свойства Value элемента управления _countOfElementView
+        /// </summary>
+        private void _countOfElementView_ValueChanged(object sender, EventArgs e)
         {
-            NewCircuit();
-            _countOfElementView.Value = 2;
-            AddElement("C", 200, 1, 2);
-            AddElement("L", 20, 2, 3);
-        }
-
-        private void toolStripMenuItem5_Click(object sender, EventArgs e)
-        {
-            NewCircuit();
-            _countOfElementView.Value = 3;
-            AddElement("R", 90, 1, 2);
-            AddElement("C", 200, 2, 3);
-            AddElement("L", 20, 3, 4);
-        }
-
-        private void toolStripMenuItem6_Click(object sender, EventArgs e)
-        {
-            NewCircuit();
-            _countOfElementView.Value = 3;
-            AddElement("R", 10, 1, 2);
-            AddElement("R", 90, 2, 3);
-            AddElement("C", 200, 3, 4);
+            if (_countOfElementView.Enabled)
+            {
+                decimal count = _countOfElementView.Value;
+                if (count > _countOfElements)
+                {
+                    AddElement("R", 10, (int)count, (int)count + 1);
+                }
+                else
+                {
+                    RemoveElement();
+                }
+                _countOfElements = _countOfElementView.Value;
+            }
         }
     }
 }

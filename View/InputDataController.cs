@@ -12,31 +12,16 @@ namespace View
         /// <summary>
         /// Метод для проверки данных
         /// </summary>
-        public static void InputDataValidating(object sender, CancelEventArgs e)
+        public static bool InputDataValidating(string text)
         {
-            Regex regex = new Regex("^[0-9]+$");
-            if ((regex.IsMatch(((TextBox)sender).Text) != true) && (((TextBox)sender).Text != ""))
-            {
-                MessageBox.Show("Invalid data in textBox. Please, try again.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true;
-                ((TextBox)sender).Text = "";
-            }
-        }
-        /// <summary>
-        /// Перегрузка метода проверки для валидации строки datagridview
-        /// </summary>
-        public static void InputDataValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            string text = ((DataGridViewCell)sender).EditedFormattedValue.ToString();
             Regex regex = new Regex("^[0-9]+$");
             if ((regex.IsMatch(text) != true) && (text != ""))
             {
-                MessageBox.Show("Invalid data in the cell. Please, try again.", "Error",
+                MessageBox.Show("Invalid data. Please, try again.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true;
-                ((DataGridViewCell)sender).Value = "";
+                return false;
             }
+            return true;
         }
     }
 }

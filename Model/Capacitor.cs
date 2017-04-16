@@ -34,10 +34,10 @@ namespace Model
         /// </summary>
         public string Name { get; set; }
 
+        private double _value;
         /// <summary>
         /// Емкость конденсатора
         /// </summary>
-        private double _value;
         public double Value
         {
             get
@@ -61,7 +61,14 @@ namespace Model
             }
         }
 
+        /// <summary>
+        /// Номер узла, откуда ток приходит
+        /// </summary>
         public int In { get; set; }
+
+        /// <summary>
+        /// Номер узла, куда ток уходит
+        /// </summary>
         public int Out { get; set; }
 
         /// <summary>
@@ -88,7 +95,7 @@ namespace Model
         /// <summary>
         /// Событие, определяющее изменение номинала конденсатора
         /// </summary>
-        public event ValueChangedHandler ValueChanged;
+        public event UserDelegate ValueChanged;
 
     }
 }

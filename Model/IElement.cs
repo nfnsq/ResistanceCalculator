@@ -5,9 +5,9 @@ using System;
 namespace Model
 {
     /// <summary>
-    /// Делегат, оторый возвращает void и принимает
+    /// Делегат, оторый возвращает void и принимает string
     /// </summary>
-    public delegate void ValueChangedHandler(string msg);
+    public delegate void UserDelegate(string msg);
 
     /// <summary>
     /// Сущность, описывающая элемент в электрической цепи
@@ -24,7 +24,14 @@ namespace Model
         /// </summary>
         double Value { get; set; }
 
+        /// <summary>
+        /// Номер узла, откуда ток приходит
+        /// </summary>
         int In { get; set; }
+        
+        /// <summary>
+        /// Номер узла, куда ток уходит
+        /// </summary>
         int Out { get; set; }
 
         /// <summary>
@@ -37,6 +44,6 @@ namespace Model
         /// <summary>
         /// Событие, происходящее при изменении номинала элемента
         /// </summary>
-        event ValueChangedHandler ValueChanged;
+        event UserDelegate ValueChanged;
     }
 }

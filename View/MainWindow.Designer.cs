@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this._groupBox = new System.Windows.Forms.GroupBox();
+            this._elementsPanel = new System.Windows.Forms.Panel();
+            this._countOfElementView = new System.Windows.Forms.NumericUpDown();
             this._dataGridView = new System.Windows.Forms.DataGridView();
             this.Frequence = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Resistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -38,22 +40,22 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.circuitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this._circuit1 = new System.Windows.Forms.ToolStripMenuItem();
+            this._circuit2 = new System.Windows.Forms.ToolStripMenuItem();
+            this._circuit3 = new System.Windows.Forms.ToolStripMenuItem();
+            this._circuit4 = new System.Windows.Forms.ToolStripMenuItem();
+            this._circuit5 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._countOfElementView = new System.Windows.Forms.NumericUpDown();
             this._groupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._countOfElementView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._countOfElementView)).BeginInit();
             this.SuspendLayout();
             // 
             // _groupBox
             // 
+            this._groupBox.Controls.Add(this._elementsPanel);
             this._groupBox.Controls.Add(this._countOfElementView);
             this._groupBox.Controls.Add(this._dataGridView);
             this._groupBox.Controls.Add(this._elementCountLabel);
@@ -62,6 +64,24 @@
             this._groupBox.Size = new System.Drawing.Size(482, 351);
             this._groupBox.TabIndex = 0;
             this._groupBox.TabStop = false;
+            // 
+            // _elementsPanel
+            // 
+            this._elementsPanel.AutoScroll = true;
+            this._elementsPanel.Location = new System.Drawing.Point(6, 45);
+            this._elementsPanel.Name = "_elementsPanel";
+            this._elementsPanel.Size = new System.Drawing.Size(470, 120);
+            this._elementsPanel.TabIndex = 5;
+            // 
+            // _countOfElementView
+            // 
+            this._countOfElementView.AutoSize = true;
+            this._countOfElementView.Enabled = false;
+            this._countOfElementView.Location = new System.Drawing.Point(173, 19);
+            this._countOfElementView.Name = "_countOfElementView";
+            this._countOfElementView.Size = new System.Drawing.Size(45, 20);
+            this._countOfElementView.TabIndex = 4;
+            this._countOfElementView.ValueChanged += new System.EventHandler(this._countOfElementView_ValueChanged);
             // 
             // _dataGridView
             // 
@@ -79,6 +99,7 @@
             this._dataGridView.TabIndex = 3;
             this._dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellEndEdit);
             this._dataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this._dataGridView_CellValidating);
+            this._dataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellValueChanged);
             // 
             // Frequence
             // 
@@ -139,62 +160,56 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem4,
-            this.toolStripMenuItem5,
-            this.toolStripMenuItem6});
+            this._circuit1,
+            this._circuit2,
+            this._circuit3,
+            this._circuit4,
+            this._circuit5});
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadToolStripMenuItem.Text = "Load";
             // 
-            // toolStripMenuItem2
+            // _circuit1
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem2.Text = "1";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click_1);
+            this._circuit1.Name = "_circuit1";
+            this._circuit1.Size = new System.Drawing.Size(152, 22);
+            this._circuit1.Text = "1";
+            this._circuit1.Click += new System.EventHandler(this.LoadCircuit);
             // 
-            // toolStripMenuItem3
+            // _circuit2
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem3.Text = "2";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            this._circuit2.Name = "_circuit2";
+            this._circuit2.Size = new System.Drawing.Size(152, 22);
+            this._circuit2.Text = "2";
+            this._circuit2.Click += new System.EventHandler(this.LoadCircuit);
             // 
-            // toolStripMenuItem4
+            // _circuit3
             // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem4.Text = "3";
-            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            this._circuit3.Name = "_circuit3";
+            this._circuit3.Size = new System.Drawing.Size(152, 22);
+            this._circuit3.Text = "3";
+            this._circuit3.Click += new System.EventHandler(this.LoadCircuit);
             // 
-            // toolStripMenuItem5
+            // _circuit4
             // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem5.Text = "4";
-            this.toolStripMenuItem5.Click += new System.EventHandler(this.toolStripMenuItem5_Click);
+            this._circuit4.Name = "_circuit4";
+            this._circuit4.Size = new System.Drawing.Size(152, 22);
+            this._circuit4.Text = "4";
+            this._circuit4.Click += new System.EventHandler(this.LoadCircuit);
             // 
-            // toolStripMenuItem6
+            // _circuit5
             // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem6.Text = "5";
-            this.toolStripMenuItem6.Click += new System.EventHandler(this.toolStripMenuItem6_Click);
+            this._circuit5.Name = "_circuit5";
+            this._circuit5.Size = new System.Drawing.Size(152, 22);
+            this._circuit5.Text = "5";
+            this._circuit5.Click += new System.EventHandler(this.LoadCircuit);
             // 
             // createToolStripMenuItem
             // 
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
             this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.createToolStripMenuItem.Text = "Create";
-            // 
-            // _countOfElementView
-            // 
-            this._countOfElementView.Location = new System.Drawing.Point(173, 19);
-            this._countOfElementView.Name = "_countOfElementView";
-            this._countOfElementView.Size = new System.Drawing.Size(45, 20);
-            this._countOfElementView.TabIndex = 4;
+            this.createToolStripMenuItem.Click += new System.EventHandler(this.CreateCircuit);
             // 
             // MainWindow
             // 
@@ -209,12 +224,12 @@
             this.Text = "MainWindow";
             this._groupBox.ResumeLayout(false);
             this._groupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._countOfElementView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._countOfElementView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,12 +247,13 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem circuitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem _circuit1;
+        private System.Windows.Forms.ToolStripMenuItem _circuit2;
+        private System.Windows.Forms.ToolStripMenuItem _circuit3;
+        private System.Windows.Forms.ToolStripMenuItem _circuit4;
+        private System.Windows.Forms.ToolStripMenuItem _circuit5;
         private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown _countOfElementView;
+        private System.Windows.Forms.Panel _elementsPanel;
     }
 }
