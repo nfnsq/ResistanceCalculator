@@ -43,7 +43,7 @@ namespace Model
                         {
                             z.Add(Elements[i].CalculateZ(frequencies[f]));
                         }
-                        
+
                         //получить размер строк
                         int rowCount = z.Count;
                         //получить размер столбцов
@@ -56,65 +56,75 @@ namespace Model
 
                         //создать и заполнить матрицу
                         List<List<int>> A = CreateMatrix(columnCount, rowCount);
-                        
-                        //Расчет общего эквивалентного сопротивления
-                        while (z.Count > 1)
-                        {
-                            //Объединение последовательных элементов
-                            for (int j = 0; j < columnCount; j++)
-                            {
-                                //поиск столбца, отвечающего условиям
-                                if ((ItemSumm(j, A) == 0) && (Quantity(j, A) == 2))
-                                {
-                                    int p = A[j].IndexOf(-1);
-                                    int q = A[j].IndexOf(1);
-                                    //замена первого элемента на экивалентную
-                                    z[p] = CalculateEquivalent(z[p], z[q], frequencies[f], true);
 
-                                    //удаление второго элемента
-                                    for (int i = 0; i < columnCount; i++)
-                                    {
-                                        A[i][p] = A[i][p] + A[i][q];
-                                        A[i].RemoveAt(q);
-                                    }
-                                    z.RemoveAt(q);
-                                }
-                            }
-                            //Объединение параллельных элементов
-                            for (int i = 0; i < z.Count; i++)
+                        //проверка на корректность матрицы
+                        if (MatrixIsCorrect(A, rowCount, columnCount))
+                        {
+                            //Расчет общего эквивалентного сопротивления
+                            while (z.Count > 1)
                             {
-                                //поиск одинаковых строк в матрице
-                                bool isEqual = true;
-                                for (int k = i + 1; k < z.Count; k++)
+                                //Объединение последовательных элементов
+                                for (int j = 0; j < columnCount; j++)
                                 {
-                                    for (int j = 0; j < columnCount; j++)
+                                    //поиск столбца, отвечающего условиям
+                                    if ((ItemSumm(j, A) == 0) && (QuantityInColumn(j, A) == 2))
                                     {
-                                        if (A[j][i] == A[j][k])
-                                        {
-                                            isEqual = isEqual && true;
-                                        }
-                                        else
-                                        {
-                                            isEqual = isEqual && false;
-                                        }
-                                    }
-                                    if (isEqual)
-                                    {
-                                        //замена первого элемента эквивалентным
-                                        z[i] = CalculateEquivalent(z[i], z[k], frequencies[f], false);
+                                        int p = A[j].IndexOf(-1);
+                                        int q = A[j].IndexOf(1);
+                                        //замена первого элемента на экивалентную
+                                        z[p] = CalculateEquivalent(z[p], z[q], frequencies[f], true);
 
                                         //удаление второго элемента
-                                        z.RemoveAt(k);
-                                        for (int n = 0; n < columnCount; n++)
+                                        for (int i = 0; i < columnCount; i++)
                                         {
-                                            A[n].RemoveAt(k);
+                                            A[i][p] = A[i][p] + A[i][q];
+                                            A[i].RemoveAt(q);
+                                        }
+                                        z.RemoveAt(q);
+                                    }
+                                }
+                                //Объединение параллельных элементов
+                                for (int i = 0; i < z.Count; i++)
+                                {
+                                    //поиск одинаковых строк в матрице
+                                    bool isEqual = true;
+                                    for (int k = i + 1; k < z.Count; k++)
+                                    {
+                                        for (int j = 0; j < columnCount; j++)
+                                        {
+                                            if (A[j][i] == A[j][k])
+                                            {
+                                                isEqual = isEqual && true;
+                                            }
+                                            else
+                                            {
+                                                isEqual = isEqual && false;
+                                            }
+                                        }
+                                        if (isEqual)
+                                        {
+                                            //замена первого элемента эквивалентным
+                                            z[i] = CalculateEquivalent(z[i], z[k], frequencies[f], false);
+
+                                            //удаление второго элемента
+                                            z.RemoveAt(k);
+                                            for (int n = 0; n < columnCount; n++)
+                                            {
+                                                A[n].RemoveAt(k);
+                                            }
                                         }
                                     }
                                 }
                             }
+
+                            result[f] = z[0];
+                            z.Clear();
                         }
-                        result[f] = z[0];
-                        z.Clear();
+                        else
+                        {
+                            MessageBox.Show("Verify that the node numbers are correct", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
@@ -148,7 +158,7 @@ namespace Model
         /// <param name="j">Номер столбца</param>
         /// <param name="A">Матрица</param>
         /// <returns></returns>
-        private int Quantity(int j, List<List<int>> A)
+        private int QuantityInColumn(int j, List<List<int>> A)
         {
             int q = 0;
             for (int i = 0; i < A[j].Count; i++)
@@ -158,7 +168,24 @@ namespace Model
             }
             return q;
         }
-        
+
+        /// <summary>
+        /// Метод считает количество ненулевых элементов в строке
+        /// </summary>
+        /// <param name="j"></param>
+        /// <param name="A"></param>
+        /// <returns></returns>
+        private int QuantityInRow(int j, List<List<int>> A)
+        {
+            int q = 0;
+            for (int i = 0; i < A[j].Count; i++)
+            {
+                if (A[i][j] != 0)
+                    q++;
+            }
+            return q;
+        }
+
         /// <summary>
         /// Метод создает матрицу инцидентности
         /// </summary>
@@ -227,6 +254,39 @@ namespace Model
         public void ElementChanged(string msg)
         {
             CircuitChanged?.Invoke("Circuit changed. " + msg);
+        }
+
+        /// <summary>
+        /// Метод проверяет корректность матрицы
+        /// </summary>
+        private bool MatrixIsCorrect(List<List<int>> matrix, int rowCount, int columnCount)
+        { 
+            bool result = true;
+            for (int i = 0; i < columnCount; i++)
+            {
+                if (QuantityInColumn(i, matrix) == 0)
+                {
+                    result = result && false;
+                }
+            }
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                if (QuantityInRow(i, matrix) == 0)
+                {
+                    result = result && false;
+                }
+            }
+
+            int q = 0;
+            for (int i = 0; i < columnCount; i++)
+            {
+                if (ItemSumm(i, matrix) == -1)
+                    q++;
+            }
+            if (q > 1) { result = result && false; }
+
+            return result;
         }
     }
 }

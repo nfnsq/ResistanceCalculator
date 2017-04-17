@@ -95,7 +95,7 @@
             this._dataGridView.Enabled = false;
             this._dataGridView.Location = new System.Drawing.Point(6, 171);
             this._dataGridView.Name = "_dataGridView";
-            this._dataGridView.Size = new System.Drawing.Size(470, 189);
+            this._dataGridView.Size = new System.Drawing.Size(470, 174);
             this._dataGridView.TabIndex = 3;
             this._dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellEndEdit);
             this._dataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this._dataGridView_CellValidating);
@@ -166,48 +166,48 @@
             this._circuit4,
             this._circuit5});
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.loadToolStripMenuItem.Text = "Load";
             // 
             // _circuit1
             // 
             this._circuit1.Name = "_circuit1";
-            this._circuit1.Size = new System.Drawing.Size(152, 22);
+            this._circuit1.Size = new System.Drawing.Size(80, 22);
             this._circuit1.Text = "1";
             this._circuit1.Click += new System.EventHandler(this.LoadCircuit);
             // 
             // _circuit2
             // 
             this._circuit2.Name = "_circuit2";
-            this._circuit2.Size = new System.Drawing.Size(152, 22);
+            this._circuit2.Size = new System.Drawing.Size(80, 22);
             this._circuit2.Text = "2";
             this._circuit2.Click += new System.EventHandler(this.LoadCircuit);
             // 
             // _circuit3
             // 
             this._circuit3.Name = "_circuit3";
-            this._circuit3.Size = new System.Drawing.Size(152, 22);
+            this._circuit3.Size = new System.Drawing.Size(80, 22);
             this._circuit3.Text = "3";
             this._circuit3.Click += new System.EventHandler(this.LoadCircuit);
             // 
             // _circuit4
             // 
             this._circuit4.Name = "_circuit4";
-            this._circuit4.Size = new System.Drawing.Size(152, 22);
+            this._circuit4.Size = new System.Drawing.Size(80, 22);
             this._circuit4.Text = "4";
             this._circuit4.Click += new System.EventHandler(this.LoadCircuit);
             // 
             // _circuit5
             // 
             this._circuit5.Name = "_circuit5";
-            this._circuit5.Size = new System.Drawing.Size(152, 22);
+            this._circuit5.Size = new System.Drawing.Size(80, 22);
             this._circuit5.Text = "5";
             this._circuit5.Click += new System.EventHandler(this.LoadCircuit);
             // 
             // createToolStripMenuItem
             // 
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.createToolStripMenuItem.Text = "Create";
             this.createToolStripMenuItem.Click += new System.EventHandler(this.CreateCircuit);
             // 
