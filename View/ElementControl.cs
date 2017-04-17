@@ -159,16 +159,13 @@ namespace View
         /// </summary>
         private void TextBoxTextChanged(object sender, EventArgs e)
         {
-            if ((TextBox)sender == _elementValue)
-            {
-                ObjectChanged?.Invoke("Value was changed.");
-            }
             if (!InputDataController.InputDataValidating(((TextBox)sender).Text))
             {
                 ((TextBox)sender).Text = "";
             }
+            ObjectChanged?.Invoke("");
         }
-        
+
         /// <summary>
         /// Событие, определяющее изменение элемента в цепи
         /// </summary>

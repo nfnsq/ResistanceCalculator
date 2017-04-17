@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Numerics;
 using System.Windows.Forms;
 
@@ -15,13 +16,22 @@ namespace Model
         /// </summary>
         public Circuit()
         {
-            Elements = new List<IElement>();
+            Elements = new ObservableCollection<IElement>();
+            Elements.CollectionChanged += Elements_CollectionChanged;
+        }
+
+        private void Elements_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (Elements.Count > 0)
+            {
+                CircuitChanged?.Invoke("Circuit changed");
+            }
         }
 
         /// <summary>
         /// Список элементов, входящих в электрическую цепь
         /// </summary>
-        public List<IElement> Elements;
+        public ObservableCollection<IElement> Elements;
 
         /// <summary>
         /// Метод для вычисления комплескного сопротивления цепи

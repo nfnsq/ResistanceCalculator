@@ -72,7 +72,7 @@ namespace View
             _circuit.Elements.Add(_iElement);
 
             ElementControl elementControl = new ElementControl();
-            elementControl.ObjectChanged += _circuit.ElementChanged;
+            elementControl.ObjectChanged += ElementControl_ObjectChanged;
             this._elementsPanel.Controls.Add(elementControl);
             
             int delta = 33;
@@ -86,9 +86,18 @@ namespace View
             elementControl.Object.ValueChanged += _circuit.ElementChanged;
 
             _elementContolList.Add(elementControl);
+        }
 
-            _circuit_CircuitChanged("Added new element");
-
+        /// <summary>
+        /// Обработчик при изменении элемента в цепи
+        /// </summary>
+        /// <param name="msg"></param>
+        private void ElementControl_ObjectChanged(string msg)
+        {
+            for (int i = 0; i < _elementContolList.Count; i++)
+            {
+                _circuit.Elements[i] = _elementContolList[i].Object;
+            }
         }
 
         /// <summary>
@@ -100,18 +109,13 @@ namespace View
             _circuit.Elements.RemoveAt(index);
             _elementContolList.RemoveAt(index);
             _elementsPanel.Controls.RemoveAt(index);
-            _circuit_CircuitChanged("removed");
         }
 
         /// <summary>
-        /// Обработчик при изменении схемы
+        /// Обработчик при изменении цепи
         /// </summary>
         private void _circuit_CircuitChanged(string msg)
         {
-            for (int i = 0; i < _elementContolList.Count; i++)
-            {
-                _circuit.Elements[i] = _elementContolList[i].Object;
-            }
             _mainWindowStatusStrip.Text = msg;
 
             foreach (DataGridViewRow row in _dataGridView.Rows)
