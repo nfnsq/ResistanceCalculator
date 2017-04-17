@@ -52,7 +52,7 @@ namespace Model
                     if (value != _value)
                     {
                         _value = value;
-                        ValueChanged?.Invoke("Resistor value was changed.");
+                        ValueChanged?.Invoke("Inductor value was changed.");
                     }
                 }
             }

@@ -87,9 +87,9 @@ namespace Model
                                 for (int i = 0; i < z.Count; i++)
                                 {
                                     //поиск одинаковых строк в матрице
-                                    bool isEqual = true;
                                     for (int k = i + 1; k < z.Count; k++)
                                     {
+                                        bool isEqual = true;
                                         for (int j = 0; j < columnCount; j++)
                                         {
                                             if (A[j][i] == A[j][k])
@@ -122,8 +122,7 @@ namespace Model
                         }
                         else
                         {
-                            MessageBox.Show("Verify that the node numbers are correct", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            InvalidMatrix?.Invoke("Verify that the node numbers are correct");
                         }
                     }
                 }
@@ -249,6 +248,11 @@ namespace Model
         public event UserDelegate CircuitChanged;
 
         /// <summary>
+        /// Событие, происходящее при неправильномм вводе номера узла
+        /// </summary>
+        public event UserDelegate InvalidMatrix;
+
+        /// <summary>
         /// Обработчик события ValueChaned
         /// </summary>
         public void ElementChanged(string msg)
@@ -278,13 +282,26 @@ namespace Model
                 }
             }
 
-            int q = 0;
+            int qP = 0;
+            int qN = 0;
+
             for (int i = 0; i < columnCount; i++)
             {
-                if (ItemSumm(i, matrix) == -1)
-                    q++;
+                int p = 0;
+                int n = 0;
+                for (int j = 0; j < rowCount; j++)
+                {
+                    if (matrix[i][j] == 1)
+                    { p++; }
+
+                    if (matrix[i][j] == -1)
+                    { n++; }
+                }
+                if (p == 0) { qP++; }
+                if (n == 0) { qN++; }
             }
-            if (q > 1) { result = result && false; }
+            
+            if ((qP > 1)||(qN > 1)) { result = result && false; }
 
             return result;
         }

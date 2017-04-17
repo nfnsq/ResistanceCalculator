@@ -32,6 +32,15 @@ namespace View
             _dataGridView.Rows.Add();
             _circuit = new Circuit();
             _circuit.CircuitChanged += _circuit_CircuitChanged;
+            _circuit.InvalidMatrix += _circuit_InvalidMatrix;
+        }
+
+        /// <summary>
+        /// Обработчик события проверки матрицы
+        /// </summary>
+        private void _circuit_InvalidMatrix(string msg)
+        {
+            _mainWindowStatusStrip.Text = msg;
         }
 
         /// <summary>
@@ -103,7 +112,7 @@ namespace View
             {
                 _circuit.Elements[i] = _elementContolList[i].Object;
             }
-            _mainWindowStatusStrip.Text = "Circuit changed";
+            _mainWindowStatusStrip.Text = msg;
 
             foreach (DataGridViewRow row in _dataGridView.Rows)
             {
@@ -281,9 +290,16 @@ namespace View
             if (_countOfElementView.Enabled)
             {
                 decimal count = _countOfElementView.Value;
+                int lastNode = 1;
+                if (_elementContolList.Count != 0)
+                {
+                    int index = _elementContolList.Count - 1;
+                    IElement element = _circuit.Elements[index];
+                    lastNode = element.Out;
+                }
                 if (count > _countOfElements)
                 {
-                    AddElement("R", 10, (int)count, (int)count + 1);
+                    AddElement("R", 10, lastNode, lastNode + 1);
                 }
                 else
                 {

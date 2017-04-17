@@ -84,7 +84,7 @@ namespace View
             _object.Value = double.Parse(_elementValue.Text);
             _object.In = int.Parse(_nodeIn.Text);
             _object.Out = int.Parse(_nodeOut.Text);
-            ObjectChanged?.Invoke("yaaaay");
+            ObjectChanged?.Invoke("Element type changed.");
 
         }
         
@@ -128,7 +128,6 @@ namespace View
                 if (((TextBox)sender).Name == "_elementValue")
                 {
                     _object.Value = double.Parse(((TextBox)sender).Text);
-                    ObjectChanged?.Invoke("wooow");
                 }
                 if (((TextBox)sender).Name == "_nodeIn")
                 {
@@ -138,6 +137,7 @@ namespace View
                 {
                     _object.Out = int.Parse(((TextBox)sender).Text);
                 }
+                ObjectChanged?.Invoke("");
             }
             catch
             {
@@ -159,6 +159,10 @@ namespace View
         /// </summary>
         private void TextBoxTextChanged(object sender, EventArgs e)
         {
+            if ((TextBox)sender == _elementValue)
+            {
+                ObjectChanged?.Invoke("Value was changed.");
+            }
             if (!InputDataController.InputDataValidating(((TextBox)sender).Text))
             {
                 ((TextBox)sender).Text = "";

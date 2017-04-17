@@ -51,7 +51,7 @@ namespace Model
                     if (value != _value)
                     {
                         _value = value;
-                        ValueChanged?.Invoke("Resistor value was changed.");
+                        ValueChanged?.Invoke("Capacitor value was changed.");
                     }
                 }
                 else
