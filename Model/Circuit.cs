@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Numerics;
 using System.Windows.Forms;
+using System.Collections.Specialized;
 
 namespace Model
 {
@@ -12,6 +13,11 @@ namespace Model
     public class Circuit
     {
         /// <summary>
+        /// Список элементов, входящих в электрическую цепь
+        /// </summary>
+        public ObservableCollection<IElement> Elements;
+
+        /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
         public Circuit()
@@ -19,19 +25,16 @@ namespace Model
             Elements = new ObservableCollection<IElement>();
             Elements.CollectionChanged += Elements_CollectionChanged;
         }
-
-        private void Elements_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (Elements.Count > 0)
-            {
-                CircuitChanged?.Invoke("Circuit changed");
-            }
-        }
+        
+        /// <summary>
+        /// Событие, происходящее при изменении номиналов элементов в цепи
+        /// </summary>
+        public event UserDelegate CircuitChanged;
 
         /// <summary>
-        /// Список элементов, входящих в электрическую цепь
+        /// Событие, происходящее при неправильномм вводе номера узла
         /// </summary>
-        public ObservableCollection<IElement> Elements;
+        public event UserDelegate InvalidMatrix;
 
         /// <summary>
         /// Метод для вычисления комплескного сопротивления цепи
@@ -45,8 +48,8 @@ namespace Model
             List<Complex> z = new List<Complex>();
             try
             {
-                    if (frequencies.Count > 0)
-                    {
+                if (frequencies.Count > 0)
+                {
                     for (int f = 0; f < frequencies.Count; f++)
                     {
                         for (int i = 0; i < Elements.Count; i++)
@@ -144,7 +147,18 @@ namespace Model
             }
             return result;
         }
-
+        
+        /// <summary>
+        /// Обработчик события изменения коллекции
+        /// </summary>
+        private void Elements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (Elements.Count > 0)
+            {
+                CircuitChanged?.Invoke("Circuit changed");
+            }
+        }
+        
         /// <summary>
         /// Метод рассчитывает сумму элементов в столбце матрицы
         /// </summary>
@@ -252,16 +266,6 @@ namespace Model
             return zEq;
         }
         
-        /// <summary>
-        /// Событие, происходящее при изменении номиналов элементов в цепи
-        /// </summary>
-        public event UserDelegate CircuitChanged;
-
-        /// <summary>
-        /// Событие, происходящее при неправильномм вводе номера узла
-        /// </summary>
-        public event UserDelegate InvalidMatrix;
-
         /// <summary>
         /// Обработчик события ValueChaned
         /// </summary>

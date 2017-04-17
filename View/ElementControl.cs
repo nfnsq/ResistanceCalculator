@@ -21,6 +21,11 @@ namespace View
         }
 
         /// <summary>
+        /// Событие, определяющее изменение элемента в цепи
+        /// </summary>
+        public event UserDelegate ObjectChanged;
+
+        /// <summary>
         /// Возвращает или устанавливает элемент в UserControl
         /// </summary>
         public IElement Object
@@ -165,10 +170,5 @@ namespace View
             }
             ObjectChanged?.Invoke("");
         }
-
-        /// <summary>
-        /// Событие, определяющее изменение элемента в цепи
-        /// </summary>
-        public event UserDelegate ObjectChanged;
     }
 }
