@@ -10,8 +10,11 @@ namespace Model
     /// Главная сущность программы, представляющая 
     /// последовательную электрическую цепь
     /// </summary>
+    /// //TODO: Сейчас у класса есть ещё обязательства по расчёту матриц и по операциям с ними - это не правильно
+    /// //TODO: Лучше для этого сделать отдельный класс
     public class Circuit
     {
+        //TODO: Использование публичных свойств - плохая практика, лучше использовать свойства
         /// <summary>
         /// Список элементов, входящих в электрическую цепь
         /// </summary>
@@ -68,6 +71,7 @@ namespace Model
                         }
 
                         //создать и заполнить матрицу
+                        //TODO: Именование по RSDN
                         List<List<int>> A = CreateMatrix(columnCount, rowCount);
 
                         //проверка на корректность матрицы
@@ -158,13 +162,14 @@ namespace Model
                 CircuitChanged?.Invoke("Circuit changed");
             }
         }
-        
+
         /// <summary>
         /// Метод рассчитывает сумму элементов в столбце матрицы
         /// </summary>
         /// <param name="j">Номер столбца</param>
         /// <param name="A">Матрица</param>
         /// <returns></returns>
+        /// //TODO: Именование по RSDN
         private int ItemSumm(int j, List<List<int>> A)
         {
             int s = 0;
@@ -181,8 +186,10 @@ namespace Model
         /// <param name="j">Номер столбца</param>
         /// <param name="A">Матрица</param>
         /// <returns></returns>
+        /// //TODO: Именование по RSDN
         private int QuantityInColumn(int j, List<List<int>> A)
         {
+
             int q = 0;
             for (int i = 0; i < A[j].Count; i++)
             {
@@ -244,6 +251,7 @@ namespace Model
         /// <summary>
         /// Метод для расчета эквивалентного сопротивления
         /// </summary>
+        /// //TODO: Не используется частота
         private Complex CalculateEquivalent(Complex z1, Complex z2, double frequence, bool connection)
         {
             Complex zEq = new Complex();
@@ -260,6 +268,7 @@ namespace Model
             }
             catch
             {
+                //TODO: Плохо показывать сообщения прямо из модели
                 MessageBox.Show("Error in calculating equivalent resistance", "Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

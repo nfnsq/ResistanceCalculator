@@ -10,14 +10,21 @@ using System.Drawing;
 
 namespace View
 {
+    //BUG: Меняем номер узла и ошибка показывается по количеству элементов в цепи
+    //BUG: Добавление новых элементов, после переконфигурирования старых - вызывает ошибки
     /// <summary>
     /// Сущность для главного окна программы
     /// </summary>
     public partial class MainWindow : Form
     {
+        //TODO: Зачем это форме?
         private IElement _iElement;
+
+
         private Circuit _circuit;
         private List<double> _frequences = new List<double>();
+
+        //TODO: Зачем это форме?
         private Complex[] _z;
         private List<ElementControl> _elementContolList = new List<ElementControl>();
         private decimal _countOfElements = 0;
@@ -54,8 +61,10 @@ namespace View
             Regex r = new Regex("R");
             Regex c = new Regex("C");
             Regex i = new Regex("L");
-
+            //TODO: Насколько просто будет расширить вашу программу при добавлении новых наследников
+            //TODO: от IElement
             if (r.IsMatch(name))
+                //TODO: во всех условных операторах ставьте {}, обрамляя инструкции
                 _iElement = new Resistor(name, value, inp, outp);
 
             if (c.IsMatch(name))
@@ -242,6 +251,8 @@ namespace View
         {
             ClearPanel();
             _countOfElementView.Enabled = false;
+            //TODO: Можно это собрать в один словарь и инициализировать ключами из словаря комбобокс
+            //TODO: а потом брать значения из словаря по ключу
             if (((ToolStripMenuItem)sender).Name == "_circuit1")
             {
                 _countOfElementView.Value = 2;

@@ -38,7 +38,7 @@ namespace View
             set
             {
                 _object = value;
-
+                //TODO: Дублируется в MainWindow
                 if (_object != null)
                 {
                     _elementValue.Text = _object.Value.ToString();
@@ -69,6 +69,7 @@ namespace View
             int key = _elementKind.SelectedIndex;
             switch (key)
             {
+                //TODO: Такие штуки правильнее группировать, используя паттерн проектирования - фабрика
                 case 0:
                     _object = new Resistor();
                     _object.Name = "R";
