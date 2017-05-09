@@ -48,6 +48,7 @@
     <Compile Include="IElement.cs" />
     <Compile Include="Inductor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IncidenceMatrix.cs" />
     <Compile Include="Resistor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -26,7 +26,7 @@ namespace UnitTests.ModelTests
         {
             Complex result = new Complex(real, imaginary);
 
-            Inductor capacitor = new Inductor("L", iValue, 1, 2);
+            Inductor capacitor = new Inductor("L", iValue);
 
             Complex z = capacitor.CalculateZ(frequency);
 

@@ -11,9 +11,8 @@ namespace View
     /// </summary>
     public partial class ElementControl : UserControl
     {
-        private IElement _object = null;
         /// <summary>
-        /// Метод иициализирующий UserControl
+        /// Метод инициализирующий UserControl
         /// </summary>
         public ElementControl()
         {
@@ -25,9 +24,42 @@ namespace View
         /// </summary>
         public event UserDelegate ObjectChanged;
 
+        private int _in;
+        /// <summary>
+        /// Номер узла, от которого ток приходит
+        /// </summary>
+        public int In
+        {
+            get
+            {
+                return _in;
+            }
+            set
+            {
+                _in = value;
+            }
+        }
+
+        private int _out;
+        /// <summary>
+        /// Номер узла, куда ток уходит
+        /// </summary>
+        public int Out
+        {
+            get
+            {
+                return _out;
+            }
+            set
+            {
+                _out = value;
+            }
+        }
+        
         /// <summary>
         /// Возвращает или устанавливает элемент в UserControl
         /// </summary>
+        private IElement _object = null;
         public IElement Object
         {
             get
@@ -42,8 +74,8 @@ namespace View
                 if (_object != null)
                 {
                     _elementValue.Text = _object.Value.ToString();
-                    _nodeIn.Text = _object.In.ToString();
-                    _nodeOut.Text = _object.Out.ToString();
+                    _nodeIn.Text = _in.ToString();
+                    _nodeOut.Text = _out.ToString();
 
                     Regex r = new Regex("R");
                     Regex c = new Regex("C");
@@ -88,8 +120,8 @@ namespace View
                     break;
             }
             _object.Value = double.Parse(_elementValue.Text);
-            _object.In = int.Parse(_nodeIn.Text);
-            _object.Out = int.Parse(_nodeOut.Text);
+            _in = int.Parse(_nodeIn.Text);
+            _out = int.Parse(_nodeOut.Text);
             ObjectChanged?.Invoke("Element type changed.");
 
         }
@@ -137,11 +169,11 @@ namespace View
                 }
                 if (((TextBox)sender).Name == "_nodeIn")
                 {
-                    _object.In = int.Parse(((TextBox)sender).Text);
+                    _in = int.Parse(((TextBox)sender).Text);
                 }
                 if (((TextBox)sender).Name == "_nodeOut")
                 {
-                    _object.Out = int.Parse(((TextBox)sender).Text);
+                    _out = int.Parse(((TextBox)sender).Text);
                 }
                 ObjectChanged?.Invoke("");
             }

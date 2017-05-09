@@ -22,12 +22,10 @@ namespace Model
         /// </summary>
         /// <param name="name">Имя элемента</param>
         /// <param name="value">Значение сопротивления резистора</param>
-        public Resistor(string name, double value, int inp, int outp)
+        public Resistor(string name, double value)
         {
             Value = value;
             Name = name;
-            In = inp;
-            Out = outp;
         }
 
         /// <summary>
@@ -61,16 +59,6 @@ namespace Model
                 }
             }
         }
-
-        /// <summary>
-        /// Номер узла, откуда ток приходит
-        /// </summary>
-        public int In { get; set; }
-
-        /// <summary>
-        /// Номер узла, куда ток уходит
-        /// </summary>
-        public int Out { get; set; }
 
         /// <summary>
         /// Метод для расчета комплексного сопротивления резистора

@@ -81,7 +81,7 @@
             this._countOfElementView.Name = "_countOfElementView";
             this._countOfElementView.Size = new System.Drawing.Size(45, 20);
             this._countOfElementView.TabIndex = 4;
-            this._countOfElementView.ValueChanged += new System.EventHandler(this._countOfElementView_ValueChanged);
+            this._countOfElementView.ValueChanged += new System.EventHandler(this.CountOfElementView_ValueChanged);
             // 
             // _dataGridView
             // 
@@ -97,9 +97,9 @@
             this._dataGridView.Name = "_dataGridView";
             this._dataGridView.Size = new System.Drawing.Size(470, 174);
             this._dataGridView.TabIndex = 3;
-            this._dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellEndEdit);
-            this._dataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this._dataGridView_CellValidating);
-            this._dataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellValueChanged);
+            this._dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellEndEdit);
+            this._dataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.DataGridView_CellValidating);
+            this._dataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellValueChanged);
             // 
             // Frequence
             // 

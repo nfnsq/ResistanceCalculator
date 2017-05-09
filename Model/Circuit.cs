@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Numerics;
 using System.Windows.Forms;
@@ -10,15 +11,39 @@ namespace Model
     /// Главная сущность программы, представляющая 
     /// последовательную электрическую цепь
     /// </summary>
-    /// //TODO: Сейчас у класса есть ещё обязательства по расчёту матриц и по операциям с ними - это не правильно
-    /// //TODO: Лучше для этого сделать отдельный класс
     public class Circuit
     {
-        //TODO: Использование публичных свойств - плохая практика, лучше использовать свойства
         /// <summary>
         /// Список элементов, входящих в электрическую цепь
         /// </summary>
-        public ObservableCollection<IElement> Elements;
+        private ObservableCollection<IElement> _elements;
+        public ObservableCollection<IElement> Elements
+        {
+            get
+            {
+                return _elements;
+            }
+            set
+            {
+                _elements = value;
+            }
+        }
+
+        private Dictionary<int, Tuple<int, int>> _nodes;
+        /// <summary>
+        /// Словарь хранит номера узлов, к которым соединены элементы
+        /// </summary>
+        public Dictionary<int, Tuple<int, int>> Nodes
+        {
+            get
+            {
+                return _nodes;
+            }
+            set
+            {
+                _nodes = value;
+            }
+        }
 
         /// <summary>
         /// Конструктор по умолчанию
@@ -26,6 +51,7 @@ namespace Model
         public Circuit()
         {
             Elements = new ObservableCollection<IElement>();
+            Nodes = new Dictionary<int, Tuple<int, int>>();
             Elements.CollectionChanged += Elements_CollectionChanged;
         }
         
@@ -66,16 +92,15 @@ namespace Model
                         int columnCount = 0;
                         foreach (IElement elem in Elements)
                         {
-                            if (elem.Out > columnCount)
-                                columnCount = elem.Out;
+                            if (_nodes[_elements.IndexOf(elem)].Item2 > columnCount)
+                                columnCount = _nodes[_elements.IndexOf(elem)].Item2;
                         }
 
                         //создать и заполнить матрицу
-                        //TODO: Именование по RSDN
-                        List<List<int>> A = CreateMatrix(columnCount, rowCount);
-
+                        IncidenceMatrix incidenceMatrix = new IncidenceMatrix(columnCount, rowCount, _nodes);
+                        
                         //проверка на корректность матрицы
-                        if (MatrixIsCorrect(A, rowCount, columnCount))
+                        if (incidenceMatrix.IsCorrect(incidenceMatrix.Matrix, rowCount, columnCount))
                         {
                             //Расчет общего эквивалентного сопротивления
                             while (z.Count > 1)
@@ -84,18 +109,18 @@ namespace Model
                                 for (int j = 0; j < columnCount; j++)
                                 {
                                     //поиск столбца, отвечающего условиям
-                                    if ((ItemSumm(j, A) == 0) && (QuantityInColumn(j, A) == 2))
+                                    if ((incidenceMatrix.GetSummOfColumn(j, incidenceMatrix.Matrix) == 0) && (incidenceMatrix.GetNonZeroQuantityInColumn(j, incidenceMatrix.Matrix) == 2))
                                     {
-                                        int p = A[j].IndexOf(-1);
-                                        int q = A[j].IndexOf(1);
+                                        int p = incidenceMatrix.Matrix[j].IndexOf(-1);
+                                        int q = incidenceMatrix.Matrix[j].IndexOf(1);
                                         //замена первого элемента на экивалентную
-                                        z[p] = CalculateEquivalent(z[p], z[q], frequencies[f], true);
+                                        z[p] = CalculateEquivalent(z[p], z[q], true);
 
                                         //удаление второго элемента
                                         for (int i = 0; i < columnCount; i++)
                                         {
-                                            A[i][p] = A[i][p] + A[i][q];
-                                            A[i].RemoveAt(q);
+                                            incidenceMatrix.Matrix[i][p] = incidenceMatrix.Matrix[i][p] + incidenceMatrix.Matrix[i][q];
+                                            incidenceMatrix.Matrix[i].RemoveAt(q);
                                         }
                                         z.RemoveAt(q);
                                     }
@@ -109,7 +134,7 @@ namespace Model
                                         bool isEqual = true;
                                         for (int j = 0; j < columnCount; j++)
                                         {
-                                            if (A[j][i] == A[j][k])
+                                            if (incidenceMatrix.Matrix[j][i] == incidenceMatrix.Matrix[j][k])
                                             {
                                                 isEqual = isEqual && true;
                                             }
@@ -121,13 +146,13 @@ namespace Model
                                         if (isEqual)
                                         {
                                             //замена первого элемента эквивалентным
-                                            z[i] = CalculateEquivalent(z[i], z[k], frequencies[f], false);
+                                            z[i] = CalculateEquivalent(z[i], z[k], false);
 
                                             //удаление второго элемента
                                             z.RemoveAt(k);
                                             for (int n = 0; n < columnCount; n++)
                                             {
-                                                A[n].RemoveAt(k);
+                                                incidenceMatrix.Matrix[n].RemoveAt(k);
                                             }
                                         }
                                     }
@@ -146,113 +171,16 @@ namespace Model
             }
             catch
             {
-                MessageBox.Show("Circuit's calculating failure.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show("Circuit's calculating failure.", "Error",
+                  //  MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return result;
         }
-        
-        /// <summary>
-        /// Обработчик события изменения коллекции
-        /// </summary>
-        private void Elements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (Elements.Count > 0)
-            {
-                CircuitChanged?.Invoke("Circuit changed");
-            }
-        }
 
-        /// <summary>
-        /// Метод рассчитывает сумму элементов в столбце матрицы
-        /// </summary>
-        /// <param name="j">Номер столбца</param>
-        /// <param name="A">Матрица</param>
-        /// <returns></returns>
-        /// //TODO: Именование по RSDN
-        private int ItemSumm(int j, List<List<int>> A)
-        {
-            int s = 0;
-            for (int i = 0; i < A[j].Count; i++)
-            {
-                s = s + A[j][i];
-            }
-            return s;
-        }
-
-        /// <summary>
-        /// Метод считает количество ненулевых элементов в столбце
-        /// </summary>
-        /// <param name="j">Номер столбца</param>
-        /// <param name="A">Матрица</param>
-        /// <returns></returns>
-        /// //TODO: Именование по RSDN
-        private int QuantityInColumn(int j, List<List<int>> A)
-        {
-
-            int q = 0;
-            for (int i = 0; i < A[j].Count; i++)
-            {
-                if (A[j][i] != 0)
-                    q++;
-            }
-            return q;
-        }
-
-        /// <summary>
-        /// Метод считает количество ненулевых элементов в строке
-        /// </summary>
-        /// <param name="j"></param>
-        /// <param name="A"></param>
-        /// <returns></returns>
-        private int QuantityInRow(int j, List<List<int>> A)
-        {
-            int q = 0;
-            for (int i = 0; i < A[j].Count; i++)
-            {
-                if (A[i][j] != 0)
-                    q++;
-            }
-            return q;
-        }
-
-        /// <summary>
-        /// Метод создает матрицу инцидентности
-        /// </summary>
-        /// <param name="columnCount">Количество столбцов</param>
-        /// <param name="rowCount">Количество строк</param>
-        /// <returns></returns>
-        private List<List<int>> CreateMatrix(int columnCount, int rowCount)
-        {
-            List<List<int>> matrix = new List<List<int>>();
-
-            for (int i = 0; i < columnCount; i++)
-            {
-                matrix.Add(new List<int>(0));
-                for (int j = 0; j < rowCount; j++)
-                {
-                    if (Elements[j].In == i + 1)
-                    {
-                        matrix[i].Add(1);
-                    }
-                    else if (Elements[j].Out == i + 1)
-                    {
-                        matrix[i].Add(-1);
-                    }
-                    else
-                    {
-                        matrix[i].Add(0);
-                    }
-                }
-            }
-            return matrix;
-        }
-        
         /// <summary>
         /// Метод для расчета эквивалентного сопротивления
         /// </summary>
-        /// //TODO: Не используется частота
-        private Complex CalculateEquivalent(Complex z1, Complex z2, double frequence, bool connection)
+        private Complex CalculateEquivalent(Complex z1, Complex z2, bool connection)
         {
             Complex zEq = new Complex();
             try
@@ -269,10 +197,21 @@ namespace Model
             catch
             {
                 //TODO: Плохо показывать сообщения прямо из модели
-                MessageBox.Show("Error in calculating equivalent resistance", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show("Error in calculating equivalent resistance", "Error", 
+                    //MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return zEq;
+        }
+
+        /// <summary>
+        /// Обработчик события изменения коллекции
+        /// </summary>
+        private void Elements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (Elements.Count > 0)
+            {
+                CircuitChanged?.Invoke("Circuit changed");
+            }
         }
         
         /// <summary>
@@ -281,52 +220,6 @@ namespace Model
         public void ElementChanged(string msg)
         {
             CircuitChanged?.Invoke("Circuit changed. " + msg);
-        }
-
-        /// <summary>
-        /// Метод проверяет корректность матрицы
-        /// </summary>
-        private bool MatrixIsCorrect(List<List<int>> matrix, int rowCount, int columnCount)
-        { 
-            bool result = true;
-            for (int i = 0; i < columnCount; i++)
-            {
-                if (QuantityInColumn(i, matrix) == 0)
-                {
-                    result = result && false;
-                }
-            }
-
-            for (int i = 0; i < rowCount; i++)
-            {
-                if (QuantityInRow(i, matrix) == 0)
-                {
-                    result = result && false;
-                }
-            }
-
-            int qP = 0;
-            int qN = 0;
-
-            for (int i = 0; i < columnCount; i++)
-            {
-                int p = 0;
-                int n = 0;
-                for (int j = 0; j < rowCount; j++)
-                {
-                    if (matrix[i][j] == 1)
-                    { p++; }
-
-                    if (matrix[i][j] == -1)
-                    { n++; }
-                }
-                if (p == 0) { qP++; }
-                if (n == 0) { qN++; }
-            }
-            
-            if ((qP > 1)||(qN > 1)) { result = result && false; }
-
-            return result;
         }
     }
 }

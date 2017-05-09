@@ -17,18 +17,10 @@ namespace View
     /// </summary>
     public partial class MainWindow : Form
     {
-        //TODO: Зачем это форме?
-        private IElement _iElement;
-
-
         private Circuit _circuit;
         private List<double> _frequences = new List<double>();
-
-        //TODO: Зачем это форме?
-        private Complex[] _z;
         private List<ElementControl> _elementContolList = new List<ElementControl>();
-        private decimal _countOfElements = 0;
-
+        
         /// <summary>
         /// Инициализация главного окна
         /// </summary>
@@ -38,7 +30,7 @@ namespace View
             _dataGridView.Columns["Resistance"].ValueType = Type.GetType("System.Double");
             _dataGridView.Rows.Add();
             _circuit = new Circuit();
-            _circuit.CircuitChanged += _circuit_CircuitChanged;
+            _circuit.CircuitChanged += Circuit_CircuitChanged;
             _circuit.InvalidMatrix += _circuit_InvalidMatrix;
         }
 
@@ -58,27 +50,30 @@ namespace View
         /// <param name="elementControl">UserControl в котором отобразится данные об элементе</param>
         private void AddElement(string name, double value, int inp, int outp)
         {
+            IElement iElement = null;
             Regex r = new Regex("R");
             Regex c = new Regex("C");
             Regex i = new Regex("L");
             //TODO: Насколько просто будет расширить вашу программу при добавлении новых наследников
             //TODO: от IElement
             if (r.IsMatch(name))
-                //TODO: во всех условных операторах ставьте {}, обрамляя инструкции
-                _iElement = new Resistor(name, value, inp, outp);
-
+            {
+                iElement = new Resistor(name, value);
+            }
             if (c.IsMatch(name))
-                _iElement = new Capacitor(name, value, inp, outp);
-
+            {
+                iElement = new Capacitor(name, value);
+            }
             if (i.IsMatch(name))
-                _iElement = new Inductor(name, value, inp, outp);
-
+            {
+                iElement = new Inductor(name, value);
+            }
             int index = _elementContolList.Count;
 
-            _iElement.Name = _iElement.Name + (index + 1).ToString();
-            _iElement.In = inp;
-            _iElement.Out = outp;
-            _circuit.Elements.Add(_iElement);
+            iElement.Name = iElement.Name + (index + 1).ToString();
+            _circuit.Elements.Add(iElement);
+            _circuit.Nodes.Add(index, new Tuple<int, int>(inp, outp));
+            
 
             ElementControl elementControl = new ElementControl();
             elementControl.ObjectChanged += ElementControl_ObjectChanged;
@@ -88,7 +83,9 @@ namespace View
 
             elementControl.Location = new Point(6, 5 + delta * index);
             elementControl.Name = "elementControl" + index.ToString();
-            elementControl.Object = _iElement;
+            elementControl.In = inp;
+            elementControl.Out = outp;
+            elementControl.Object = iElement;
             elementControl.Visible = true;
             elementControl.Size = new Size(416, 27);
             elementControl.TabIndex = _dataGridView.TabIndex + index + 1;
@@ -106,6 +103,7 @@ namespace View
             for (int i = 0; i < _elementContolList.Count; i++)
             {
                 _circuit.Elements[i] = _elementContolList[i].Object;
+                _circuit.Nodes[i] = new Tuple<int, int>(_elementContolList[i].In, _elementContolList[i].Out);
             }
         }
 
@@ -116,6 +114,7 @@ namespace View
         {
             int index = _circuit.Elements.Count - 1;
             _circuit.Elements.RemoveAt(index);
+            _circuit.Nodes.Remove(index);
             _elementContolList.RemoveAt(index);
             _elementsPanel.Controls.RemoveAt(index);
         }
@@ -123,7 +122,7 @@ namespace View
         /// <summary>
         /// Обработчик при изменении цепи
         /// </summary>
-        private void _circuit_CircuitChanged(string msg)
+        private void Circuit_CircuitChanged(string msg)
         {
             _mainWindowStatusStrip.Text = msg;
 
@@ -135,14 +134,14 @@ namespace View
                     _frequences[i] = double.Parse(row.Cells[0].FormattedValue.ToString());
                 }
             }
-            _z = _circuit.CalculateZ(_frequences);
+            Complex[] z = _circuit.CalculateZ(_frequences);
 
             foreach (DataGridViewRow row in _dataGridView.Rows)
             {
                 if (row.Cells[0].Value != null)
                 {
                     int i = row.Index;
-                    row.Cells[1].Value = _z.GetValue(i);
+                    row.Cells[1].Value = z.GetValue(i);
                 }
             }
         }
@@ -150,7 +149,7 @@ namespace View
         /// <summary>
         /// Валидация введенных в dataGridView данных
         /// </summary>
-        private void _dataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        private void DataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -170,7 +169,7 @@ namespace View
         /// <summary>
         /// Обработчик при изменении значения ячейки _dataGridView
         /// </summary>
-        private void _dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if ((e.ColumnIndex == 0) && ((DataGridView)sender).RowCount != 0)
             {
@@ -186,7 +185,7 @@ namespace View
         /// <summary>
         /// Обработчик при остановке режима правки для выбранной ячейки
         /// </summary>
-        private void _dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             _mainWindowStatusStrip.Text = "";
             int r = e.RowIndex;
@@ -215,8 +214,8 @@ namespace View
             }
             try
             {
-                _z = _circuit.CalculateZ(_frequences);
-                _dataGridView.Rows[r].Cells[1].Value = _z.GetValue(r);
+                Complex[] z = _circuit.CalculateZ(_frequences);
+                _dataGridView.Rows[r].Cells[1].Value = z.GetValue(r);
                 if (r + 1 == _dataGridView.Rows.Count)
                     _dataGridView.Rows.Add();
             }
@@ -300,7 +299,7 @@ namespace View
         /// <summary>
         /// Обрабочик при изменении свойства Value элемента управления _countOfElementView
         /// </summary>
-        private void _countOfElementView_ValueChanged(object sender, EventArgs e)
+        private void CountOfElementView_ValueChanged(object sender, EventArgs e)
         {
             if (_countOfElementView.Enabled)
             {
@@ -309,10 +308,9 @@ namespace View
                 if (_elementContolList.Count != 0)
                 {
                     int index = _elementContolList.Count - 1;
-                    IElement element = _circuit.Elements[index];
-                    lastNode = element.Out;
+                    lastNode = _circuit.Nodes[index].Item2;
                 }
-                if (count > _countOfElements)
+                if (count > _circuit.Elements.Count)
                 {
                     AddElement("R", 10, lastNode, lastNode + 1);
                 }
@@ -320,7 +318,6 @@ namespace View
                 {
                     RemoveElement();
                 }
-                _countOfElements = _countOfElementView.Value;
             }
         }
     }
