@@ -241,6 +241,7 @@ namespace View
             }
             _elementContolList.Clear();
             _circuit.Elements.Clear();
+            _circuit.Nodes.Clear();
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System;
 
 namespace Model
 {
@@ -85,5 +86,18 @@ namespace Model
         /// Событие, определяющее изменение номинала резистора
         /// </summary>
         public event UserDelegate ValueChanged;
+    }
+
+    public class ResistorCreator : Creator
+    {
+        public ResistorCreator(string name) : base(name)
+        {
+
+        }
+
+        public override IElement CreateElement()
+        {
+            return new Resistor(Name, 10);
+        }
     }
 }

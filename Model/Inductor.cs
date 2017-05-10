@@ -83,4 +83,17 @@ namespace Model
         /// </summary>
         public event UserDelegate ValueChanged;
     }
+
+    public class InductorCreator : Creator
+    {
+        public InductorCreator(string name) : base(name)
+        {
+
+        }
+
+        public override IElement CreateElement()
+        {
+            return new Inductor(Name, 10);
+        }
+    }
 }

@@ -86,4 +86,16 @@ namespace Model
         public event UserDelegate ValueChanged;
 
     }
+
+    public class CapacitorCreator : Creator
+    {
+        public CapacitorCreator(string name) : base(name)
+        {
+        }
+
+        public override IElement CreateElement()
+        {
+            return new Capacitor(Name, 10);
+        }
+    }
 }

@@ -99,26 +99,32 @@ namespace View
         private void _elementKind_SelectedIndexChanged(object sender, EventArgs e)
         {
             int key = _elementKind.SelectedIndex;
+            Creator creator = null;
             switch (key)
             {
                 //TODO: Такие штуки правильнее группировать, используя паттерн проектирования - фабрика
                 case 0:
-                    _object = new Resistor();
-                    _object.Name = "R";
+                    creator = new ResistorCreator("R");
+                    /*_object = new Resistor();
+                    _object.Name = "R";*/
                     break;
                 case 1:
-                    _object = new Capacitor();
-                    _object.Name = "C";
+                    creator = new CapacitorCreator("C");
+                    /*_object = new Capacitor();
+                    _object.Name = "C";*/
                     break;
                 case 2:
-                    _object = new Inductor();
-                    _object.Name = "L";
+                    creator = new InductorCreator("L");
+                    /*_object = new Inductor();
+                    _object.Name = "L";*/
                     break;
                 default:
                     MessageBox.Show("Object wasn't created.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
+            _object = creator.CreateElement();
+
             _object.Value = double.Parse(_elementValue.Text);
             _in = int.Parse(_nodeIn.Text);
             _out = int.Parse(_nodeOut.Text);
