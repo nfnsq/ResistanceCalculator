@@ -86,14 +86,14 @@ namespace Model
 
     public class InductorCreator : Creator
     {
-        public InductorCreator(string name) : base(name)
+        public InductorCreator(string name, double value) : base(name, value)
         {
 
         }
 
         public override IElement CreateElement()
         {
-            return new Inductor(Name, 10);
+            return new Inductor(Name, Value);
         }
     }
 }

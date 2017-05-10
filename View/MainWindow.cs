@@ -31,13 +31,13 @@ namespace View
             _dataGridView.Rows.Add();
             _circuit = new Circuit();
             _circuit.CircuitChanged += Circuit_CircuitChanged;
-            _circuit.InvalidMatrix += _circuit_InvalidMatrix;
+            _circuit.InvalidMatrix += Circuit_InvalidMatrix;
         }
 
         /// <summary>
         /// Обработчик события проверки матрицы
         /// </summary>
-        private void _circuit_InvalidMatrix(string msg)
+        private void Circuit_InvalidMatrix(string msg)
         {
             _mainWindowStatusStrip.Text = msg;
         }
@@ -105,6 +105,7 @@ namespace View
                 _circuit.Elements[i] = _elementContolList[i].Object;
                 _circuit.Nodes[i] = new Tuple<int, int>(_elementContolList[i].In, _elementContolList[i].Out);
             }
+            Circuit_CircuitChanged("");
         }
 
         /// <summary>

@@ -8,11 +8,13 @@ namespace Model
 {
     public abstract class Creator
     {
-        public Creator(string name)
+        public Creator(string name, double value)
         {
             Name = name;
+            Value = value;
         }
         public string Name { get; set; }
+        public double Value { get; set; }
 
         public abstract IElement CreateElement();
     }

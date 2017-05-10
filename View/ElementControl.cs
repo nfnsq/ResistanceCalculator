@@ -99,33 +99,26 @@ namespace View
         private void _elementKind_SelectedIndexChanged(object sender, EventArgs e)
         {
             int key = _elementKind.SelectedIndex;
+            double value = double.Parse(_elementValue.Text); 
             Creator creator = null;
             switch (key)
             {
-                //TODO: Такие штуки правильнее группировать, используя паттерн проектирования - фабрика
                 case 0:
-                    creator = new ResistorCreator("R");
-                    /*_object = new Resistor();
-                    _object.Name = "R";*/
+                    creator = new ResistorCreator("R", value);
                     break;
                 case 1:
-                    creator = new CapacitorCreator("C");
-                    /*_object = new Capacitor();
-                    _object.Name = "C";*/
+                    creator = new CapacitorCreator("C", value);
                     break;
                 case 2:
-                    creator = new InductorCreator("L");
-                    /*_object = new Inductor();
-                    _object.Name = "L";*/
+                    creator = new InductorCreator("L", value);
                     break;
                 default:
                     MessageBox.Show("Object wasn't created.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
-            _object = creator.CreateElement();
 
-            _object.Value = double.Parse(_elementValue.Text);
+            _object = creator.CreateElement();
             _in = int.Parse(_nodeIn.Text);
             _out = int.Parse(_nodeOut.Text);
             ObjectChanged?.Invoke("Element type changed.");

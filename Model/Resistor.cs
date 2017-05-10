@@ -90,14 +90,14 @@ namespace Model
 
     public class ResistorCreator : Creator
     {
-        public ResistorCreator(string name) : base(name)
+        public ResistorCreator(string name, double value) : base(name, value)
         {
 
         }
 
         public override IElement CreateElement()
         {
-            return new Resistor(Name, 10);
+            return new Resistor(Name, Value);
         }
     }
 }

@@ -89,13 +89,13 @@ namespace Model
 
     public class CapacitorCreator : Creator
     {
-        public CapacitorCreator(string name) : base(name)
+        public CapacitorCreator(string name, double value) : base(name, value)
         {
         }
 
         public override IElement CreateElement()
         {
-            return new Capacitor(Name, 10);
+            return new Capacitor(Name, Value);
         }
     }
 }
