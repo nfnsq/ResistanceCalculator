@@ -36,6 +36,7 @@ namespace View
             }
             set
             {
+                //TODO: Потенциально можем получить отрицительный узел
                 _in = value;
             }
         }
@@ -52,6 +53,7 @@ namespace View
             }
             set
             {
+                //TODO: Потенциально можем получить отрицительный узел
                 _out = value;
             }
         }
@@ -81,6 +83,7 @@ namespace View
                     Regex c = new Regex("C");
                     Regex i = new Regex("L");
 
+                    //TODO: Скобочки?
                     if (r.IsMatch(_object.Name))
                         _elementKind.SelectedIndex = 0;
 

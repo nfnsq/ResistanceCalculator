@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Model
 {
+    //TODO: XML комментарии
+    //TODO: не понятно назначение этой сущности
+
     public abstract class Creator
     {
         public Creator(string name, double value)
