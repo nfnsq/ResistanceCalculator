@@ -63,7 +63,7 @@ namespace Model
         /// <summary>
         /// Событие, происходящее при неправильномм вводе номера узла
         /// </summary>
-        public event UserDelegate InvalidMatrix;
+        public event UserDelegate InvalidNodes;
 
         /// <summary>
         /// Метод для вычисления комплескного сопротивления цепи
@@ -164,7 +164,7 @@ namespace Model
                         }
                         else
                         {
-                            InvalidMatrix?.Invoke("Verify that the node numbers are correct");
+                            InvalidNodes?.Invoke("Verify that the node numbers are correct");
                         }
                     }
                 }

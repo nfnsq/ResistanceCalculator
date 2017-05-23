@@ -31,7 +31,7 @@ namespace View
             _dataGridView.Rows.Add();
             _circuit = new Circuit();
             _circuit.CircuitChanged += Circuit_CircuitChanged;
-            _circuit.InvalidMatrix += Circuit_InvalidMatrix;
+            _circuit.InvalidNodes += Circuit_InvalidMatrix;
         }
 
         /// <summary>
