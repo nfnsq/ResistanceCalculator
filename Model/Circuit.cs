@@ -171,8 +171,10 @@ namespace Model
             }
             catch
             {
-                //MessageBox.Show("Circuit's calculating failure.", "Error",
-                  //  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                for (int i = 0; i < frequencies.Count; i++)
+                {
+                    result[i] = Complex.Zero;
+                }
             }
             return result;
         }
@@ -197,8 +199,7 @@ namespace Model
             catch
             {
                 //TODO: Плохо показывать сообщения прямо из модели
-                //MessageBox.Show("Error in calculating equivalent resistance", "Error", 
-                    //MessageBoxButtons.OK, MessageBoxIcon.Error);
+                zEq = Complex.Zero;
             }
             return zEq;
         }

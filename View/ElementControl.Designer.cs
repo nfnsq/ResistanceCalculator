@@ -39,6 +39,7 @@
             // 
             // _elementKind
             // 
+            this._elementKind.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this._elementKind.FormattingEnabled = true;
             this._elementKind.Items.AddRange(new object[] {
             "Resistor",

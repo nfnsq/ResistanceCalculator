@@ -15,10 +15,8 @@ namespace View
         public static bool InputDataValidating(string text)
         {
             Regex regex = new Regex("^[0-9]+$");
-            if ((regex.IsMatch(text) != true) && (text != ""))
+            if (regex.IsMatch(text) != true)
             {
-                MessageBox.Show("Invalid data. Please, try again.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;

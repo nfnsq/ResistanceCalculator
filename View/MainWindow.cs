@@ -51,23 +51,10 @@ namespace View
         private void AddElement(string name, double value, int inp, int outp)
         {
             IElement iElement = null;
-            Regex r = new Regex("R");
-            Regex c = new Regex("C");
-            Regex i = new Regex("L");
-            //TODO: Насколько просто будет расширить вашу программу при добавлении новых наследников
-            //TODO: от IElement
-            if (r.IsMatch(name))
-            {
-                iElement = new Resistor(name, value);
-            }
-            if (c.IsMatch(name))
-            {
-                iElement = new Capacitor(name, value);
-            }
-            if (i.IsMatch(name))
-            {
-                iElement = new Inductor(name, value);
-            }
+            Factory factory = Factory.GetFactory(name[0]);
+            iElement = factory.CreateElement(value);
+            //TODO: Насколько просто будет расширить вашу программу при добавлении новых наследников(done)
+            //TODO: от IElement(done)
             int index = _elementContolList.Count;
 
             iElement.Name = iElement.Name + (index + 1).ToString();
@@ -252,39 +239,54 @@ namespace View
         {
             ClearPanel();
             _countOfElementView.Enabled = false;
-            //TODO: Можно это собрать в один словарь и инициализировать ключами из словаря комбобокс
-            //TODO: а потом брать значения из словаря по ключу
-            if (((ToolStripMenuItem)sender).Name == "_circuit1")
+
+            //HACK: инициализируются каждый раз при выборе схемы
+            var dict = new Dictionary<string, Tuple<int, List<Tuple <string, int, int, int>>>>();
+
+            dict.Add("_circuit1", new Tuple<int, List<Tuple<string, int, int, int>>>(2,
+                    new List<Tuple<string, int, int, int>>
+                    {
+                        new Tuple<string, int, int, int>("R", 10, 1, 2),
+                        new Tuple<string, int, int, int>("C", 150, 1, 2),
+                    }));
+
+            dict.Add("_circuit2", new Tuple<int, List<Tuple<string, int, int, int>>>(2,
+                    new List<Tuple<string, int, int, int>>
+                    {
+                        new Tuple<string, int, int, int>("R", 10, 1, 2),
+                        new Tuple<string, int, int, int>("L", 50, 2, 3),
+                    }));
+
+            dict.Add("_circuit3", new Tuple<int, List<Tuple<string, int, int, int>>>(2,
+                    new List<Tuple<string, int, int, int>>
+                    {
+                        new Tuple<string, int, int, int>("C", 200, 1, 2),
+                        new Tuple<string, int, int, int>("L", 20, 2, 3),
+                    }));
+
+            dict.Add("_circuit4", new Tuple<int, List<Tuple<string, int, int, int>>>(3,
+                    new List<Tuple<string, int, int, int>>
+                    {
+                        new Tuple<string, int, int, int>("R", 90, 1, 2),
+                        new Tuple<string, int, int, int>("C", 200, 2, 3),
+                        new Tuple<string, int, int, int>("L", 20, 3, 4),
+                    }));
+
+            dict.Add("_circuit5", new Tuple<int, List<Tuple<string, int, int, int>>>(3,
+                    new List<Tuple<string, int, int, int>>
+                    {
+                        new Tuple<string, int, int, int>("R", 10, 1, 2),
+                        new Tuple<string, int, int, int>("R", 90, 2, 3),
+                        new Tuple<string, int, int, int>("C", 200, 3, 4),
+                    }));
+
+
+            var element = dict[((ToolStripMenuItem)sender).Name];
+            _countOfElementView.Value = element.Item1;
+
+            foreach (var elem in element.Item2)
             {
-                _countOfElementView.Value = 2;
-                AddElement("R", 10, 1, 2);
-                AddElement("C", 150, 1, 2);
-            }
-            if (((ToolStripMenuItem)sender).Name == "_circuit2")
-            {
-                _countOfElementView.Value = 2;
-                AddElement("R", 12, 1, 2);
-                AddElement("L", 50, 2, 3);
-            }
-            if (((ToolStripMenuItem)sender).Name == "_circuit3")
-            {
-                _countOfElementView.Value = 2;
-                AddElement("C", 200, 1, 2);
-                AddElement("L", 20, 2, 3);
-            }
-            if (((ToolStripMenuItem)sender).Name == "_circuit4")
-            {
-                _countOfElementView.Value = 3;
-                AddElement("R", 90, 1, 2);
-                AddElement("C", 200, 2, 3);
-                AddElement("L", 20, 3, 4);
-            }
-            if (((ToolStripMenuItem)sender).Name == "_circuit5")
-            {
-                _countOfElementView.Value = 3;
-                AddElement("R", 10, 1, 2);
-                AddElement("R", 90, 2, 3);
-                AddElement("C", 200, 3, 4);
+                AddElement(elem.Item1, elem.Item2, elem.Item3, elem.Item4);
             }
         }
 

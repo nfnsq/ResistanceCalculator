@@ -11,19 +11,11 @@ namespace Model
     public class Resistor : IElement
     {
         /// <summary>
-        /// Конструктор по умолчанию
-        /// </summary>
-        public Resistor()
-        {
-
-        }
-
-        /// <summary>
         /// Параметризированный конструктор
         /// </summary>
         /// <param name="name">Имя элемента</param>
         /// <param name="value">Значение сопротивления резистора</param>
-        public Resistor(string name, double value)
+        internal Resistor(string name, double value)
         {
             Value = value;
             Name = name;
@@ -32,7 +24,21 @@ namespace Model
         /// <summary>
         /// Уникальное имя резистора
         /// </summary>
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (value[0] == 'R')
+                {
+                    _name = value;
+                }
+            }
+        }
 
         private double _value;
         /// <summary>
@@ -86,18 +92,5 @@ namespace Model
         /// Событие, определяющее изменение номинала резистора
         /// </summary>
         public event UserDelegate ValueChanged;
-    }
-
-    public class ResistorCreator : Creator
-    {
-        public ResistorCreator(string name, double value) : base(name, value)
-        {
-
-        }
-
-        public override IElement CreateElement()
-        {
-            return new Resistor(Name, Value);
-        }
     }
 }

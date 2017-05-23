@@ -36,8 +36,15 @@ namespace View
             }
             set
             {
-                //TODO: Потенциально можем получить отрицительный узел
-                _in = value;
+                if (value > 0)
+                {
+                    _in = value;
+                }
+                else
+                {
+                    _in = 1;
+                    _out = 2;
+                }
             }
         }
 
@@ -53,8 +60,15 @@ namespace View
             }
             set
             {
-                //TODO: Потенциально можем получить отрицительный узел
-                _out = value;
+                if (value > 0)
+                {
+                    _out = value;
+                }
+                else
+                {
+                    _in = 1;
+                    _out = 2;
+                }
             }
         }
         
@@ -72,60 +86,50 @@ namespace View
             set
             {
                 _object = value;
-                //TODO: Дублируется в MainWindow
+                //TODO: Дублируется в MainWindow (done)
                 if (_object != null)
                 {
                     _elementValue.Text = _object.Value.ToString();
                     _nodeIn.Text = _in.ToString();
                     _nodeOut.Text = _out.ToString();
 
-                    Regex r = new Regex("R");
-                    Regex c = new Regex("C");
-                    Regex i = new Regex("L");
-
-                    //TODO: Скобочки?
-                    if (r.IsMatch(_object.Name))
+                    if (_object.Name[0] == 'R')
+                    {
                         _elementKind.SelectedIndex = 0;
-
-                    if (c.IsMatch(_object.Name))
+                    }
+                    if (_object.Name[0] == 'C')
+                    {
                         _elementKind.SelectedIndex = 1;
-
-                    if (i.IsMatch(_object.Name))
+                    }
+                    if (_object.Name[0] == 'L')
+                    {
                         _elementKind.SelectedIndex = 2;
+                    }
                 }
             }
         }
-        
+
         /// <summary>
         /// Обработчик события SelectedIndexChanged
         /// </summary>
         private void _elementKind_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int key = _elementKind.SelectedIndex;
-            double value = double.Parse(_elementValue.Text); 
-            Creator creator = null;
-            switch (key)
+            try
             {
-                case 0:
-                    creator = new ResistorCreator("R", value);
-                    break;
-                case 1:
-                    creator = new CapacitorCreator("C", value);
-                    break;
-                case 2:
-                    creator = new InductorCreator("L", value);
-                    break;
-                default:
-                    MessageBox.Show("Object wasn't created.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
+                int key = _elementKind.SelectedIndex;
+                Factory factory = Factory.GetFactory(key);
+                double value = double.Parse(_elementValue.Text);
+                _object = factory.CreateElement(value); ;
+                _in = int.Parse(_nodeIn.Text);
+                _out = int.Parse(_nodeOut.Text);
+                ObjectChanged?.Invoke("Element type changed.");
+
             }
-
-            _object = creator.CreateElement();
-            _in = int.Parse(_nodeIn.Text);
-            _out = int.Parse(_nodeOut.Text);
-            ObjectChanged?.Invoke("Element type changed.");
-
+            catch
+            {
+                MessageBox.Show("Object wasn't created.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);                
+            }
         }
         
         /// <summary>
@@ -144,16 +148,25 @@ namespace View
                 }
                 else
                 {
-                    MessageBox.Show("Invalid data, try again.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ((TextBox)sender).Text = "";
                     e.Cancel = true;
+                    if (((TextBox)sender).Text == "")
+                    {
+                        MessageBox.Show("It's empty! Should be filled.", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    if ((a == b)||(a > b))
+                    {
+                        MessageBox.Show("In should be less than Out", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    ((TextBox)sender).Text = "";
                 }
             }
             catch
             {
                 MessageBox.Show("Parsing failure.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Cancel = true;
             }
 
         }
@@ -199,8 +212,10 @@ namespace View
         /// </summary>
         private void TextBoxTextChanged(object sender, EventArgs e)
         {
-            if (!InputDataController.InputDataValidating(((TextBox)sender).Text))
+            if ((!InputDataController.InputDataValidating(((TextBox)sender).Text))&&(((TextBox)sender).Text != ""))
             {
+                MessageBox.Show("Invalid data. Please, try again. Only numeric can be entered.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ((TextBox)sender).Text = "";
             }
             ObjectChanged?.Invoke("");

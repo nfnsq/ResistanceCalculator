@@ -10,19 +10,11 @@ namespace Model
     public class Capacitor : IElement
     {
         /// <summary>
-        /// Конструктор по умолчанию 
-        /// </summary>
-        public Capacitor()
-        {
-
-        }
-
-        /// <summary>
         /// Параметеризированный конструктор
         /// </summary>
         /// <param name="name">Имя элемента</param>
         /// <param name="value">Значение емкости конденсатора</param>
-        public Capacitor(string name, double value)
+        internal Capacitor(string name, double value)
         {
             Value = value;
             Name = name;
@@ -30,7 +22,21 @@ namespace Model
         /// <summary>
         /// Уникальное имя конденсатора 
         /// </summary>
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (value[0] == 'C')
+                {
+                    _name = value;
+                }
+            }
+        }
 
         private double _value;
         /// <summary>
@@ -85,17 +91,5 @@ namespace Model
         /// </summary>
         public event UserDelegate ValueChanged;
 
-    }
-
-    public class CapacitorCreator : Creator
-    {
-        public CapacitorCreator(string name, double value) : base(name, value)
-        {
-        }
-
-        public override IElement CreateElement()
-        {
-            return new Capacitor(Name, Value);
-        }
     }
 }
