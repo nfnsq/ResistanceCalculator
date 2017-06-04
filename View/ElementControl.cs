@@ -36,7 +36,7 @@ namespace View
             }
             set
             {
-                if (value > 0)
+                if (value >= 0)
                 {
                     _in = value;
                 }
@@ -60,7 +60,7 @@ namespace View
             }
             set
             {
-                if (value > 0)
+                if (value >= 0)
                 {
                     _out = value;
                 }
@@ -142,7 +142,7 @@ namespace View
                 int a = int.Parse(_nodeIn.Text);
                 int b = int.Parse(_nodeOut.Text);
                 if (InputDataController.InputDataValidating(((TextBox)sender).Text)
-                && (a != b) && (a < b))
+                && (a != b) && ((a < b) || (b == 0)))
                 {
                     e.Cancel = false;
                 }

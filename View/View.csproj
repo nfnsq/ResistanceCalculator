@@ -61,8 +61,17 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph">
+      <HintPath>..\..\..\Documents\Visual Studio 2015\Projects\GraphPlotter\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AC Analysis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AC Analysis.Designer.cs">
+      <DependentUpon>AC Analysis.cs</DependentUpon>
+    </Compile>
     <Compile Include="ElementControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -76,8 +85,12 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AC Analysis.resx">
+      <DependentUpon>AC Analysis.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ElementControl.resx">
       <DependentUpon>ElementControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -46,6 +46,9 @@
             this._circuit4 = new System.Windows.Forms.ToolStripMenuItem();
             this._circuit5 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.analysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.transientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._countOfElementView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
@@ -126,9 +129,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._mainWindowStatusStrip});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 384);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 383);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(506, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(500, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -141,10 +144,11 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.circuitToolStripMenuItem});
+            this.circuitToolStripMenuItem,
+            this.analysisToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(506, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(500, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -211,11 +215,33 @@
             this.createToolStripMenuItem.Text = "Create";
             this.createToolStripMenuItem.Click += new System.EventHandler(this.CreateCircuit);
             // 
+            // analysisToolStripMenuItem
+            // 
+            this.analysisToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.transientToolStripMenuItem,
+            this.aCToolStripMenuItem});
+            this.analysisToolStripMenuItem.Name = "analysisToolStripMenuItem";
+            this.analysisToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.analysisToolStripMenuItem.Text = "Analysis";
+            // 
+            // transientToolStripMenuItem
+            // 
+            this.transientToolStripMenuItem.Name = "transientToolStripMenuItem";
+            this.transientToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.transientToolStripMenuItem.Text = "Transient";
+            // 
+            // aCToolStripMenuItem
+            // 
+            this.aCToolStripMenuItem.Name = "aCToolStripMenuItem";
+            this.aCToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aCToolStripMenuItem.Text = "AC";
+            this.aCToolStripMenuItem.Click += new System.EventHandler(this.aCToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 406);
+            this.ClientSize = new System.Drawing.Size(500, 405);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this._groupBox);
@@ -255,5 +281,8 @@
         private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown _countOfElementView;
         private System.Windows.Forms.Panel _elementsPanel;
+        private System.Windows.Forms.ToolStripMenuItem analysisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem transientToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aCToolStripMenuItem;
     }
 }

@@ -7,6 +7,8 @@ using System.Numerics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace View
 {
@@ -17,6 +19,7 @@ namespace View
     /// </summary>
     public partial class MainWindow : Form
     {
+
         private Circuit _circuit;
         private List<double> _frequences = new List<double>();
         private List<ElementControl> _elementContolList = new List<ElementControl>();
@@ -32,7 +35,8 @@ namespace View
             _circuit = new Circuit();
             _circuit.CircuitChanged += Circuit_CircuitChanged;
             _circuit.InvalidNodes += Circuit_InvalidMatrix;
-        }
+
+                    }
 
         /// <summary>
         /// Обработчик события проверки матрицы
@@ -323,6 +327,12 @@ namespace View
                     RemoveElement();
                 }
             }
+        }
+
+        private void aCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AC_Analysis acWindow = new AC_Analysis(_circuit);
+            acWindow.ShowDialog();
         }
     }
 }
