@@ -331,8 +331,16 @@ namespace View
 
         private void aCToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AC_Analysis acWindow = new AC_Analysis(_circuit);
-            acWindow.ShowDialog();
+            if (_circuit.Elements.Count == 0)
+            {
+                MessageBox.Show("Circuit should have at least one element.", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                AC_Analysis acWindow = new AC_Analysis(_circuit);
+                acWindow.ShowDialog();
+            }
         }
     }
 }

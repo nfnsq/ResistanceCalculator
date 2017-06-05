@@ -1,20 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace View
 {
-    public class Parser
+    /// <summary>
+    /// Синтаксический анализатор
+    /// </summary>
+    public static class Parser
     {
-        public List<double> GetVectorList(string stringFromLib)
+        /// <summary>
+        /// Метод разделяет строку на подстроки
+        /// </summary>
+        /// <param name="stringFromLib"></param>
+        /// <returns></returns>
+        public static string[] GetArrayOfData(string stringFromLib)
         {
-            List<double> t = new List<double>();
+            try
+            {
+                string[] substrings;
 
+                var re = new Regex("stdout ");
+                stringFromLib = re.Replace(stringFromLib, "");
+                re = new Regex(",");
+                stringFromLib = re.Replace(stringFromLib, "");
 
+                int index = stringFromLib.IndexOf("\t");
+                stringFromLib = stringFromLib.Substring(index - 1);
 
-            return t;
+                char delimiter = '\t';
+                substrings = stringFromLib.Split(delimiter);
+
+                return substrings;
+            }
+            catch
+            {
+                MessageBox.Show("Parser error", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
     }
 }
