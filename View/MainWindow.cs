@@ -147,7 +147,7 @@ namespace View
             {
                 DataGridViewCell cell = ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex];
                 string text = cell.EditedFormattedValue.ToString();
-                if (InputDataController.InputDataValidating(text))
+                if (InputDataController.InputIntValidating(text))
                 {
                     e.Cancel = false;
                 }
@@ -167,7 +167,7 @@ namespace View
             {
                 DataGridViewCell cell = ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex];
                 string text = cell.EditedFormattedValue.ToString();
-                if (!InputDataController.InputDataValidating(text))
+                if (!InputDataController.InputIntValidating(text))
                 {
                     cell.Value = "";
                 }

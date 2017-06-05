@@ -310,6 +310,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.zedGraphControl.IsAutoScrollRange = true;
+            this.zedGraphControl.IsShowCursorValues = true;
+            this.zedGraphControl.IsShowPointValues = true;
             this.zedGraphControl.Location = new System.Drawing.Point(375, 24);
             this.zedGraphControl.Name = "zedGraphControl";
             this.zedGraphControl.ScrollGrace = 0D;

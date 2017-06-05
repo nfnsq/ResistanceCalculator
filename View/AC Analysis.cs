@@ -16,7 +16,7 @@ namespace View
         private static bool _write = false;
 
         // явно захватить делегаты в поля класса, 
-        // чтобы при экземпляры делегата не были собраны сборщиком мусора
+        // чтобы экземпляры делегата не были собраны сборщиком мусора
         private SendChar _sc;
         private SendStat _ss;
         private ControlledExit _ce;
@@ -102,7 +102,7 @@ namespace View
         /// Метод получает данные для прорисовки графика
         /// </summary>
         /// <returns></returns>
-        private PointPairList GetPointPairs()
+        private PointPairList GetPointPairsDB()
         {
             PointPairList pointsList = new PointPairList();
             
@@ -111,6 +111,25 @@ namespace View
             {
                 double x = double.Parse(substrings[i + 1], CultureInfo.InvariantCulture);
                 double y = double.Parse(substrings[i + 2], CultureInfo.InvariantCulture);
+                pointsList.Add(x, y);
+            }
+            return pointsList;
+        }
+        /// <summary>
+        /// Метод получает данные для прорисовки графика
+        /// </summary>
+        /// <returns></returns>
+        private PointPairList GetPointPairsHZ()
+        {
+            PointPairList pointsList = new PointPairList();
+
+            string[] substrings = Parser.GetArrayOfData(_text);
+            for (int i = 0; i < substrings.Length - 4; i += 4)
+            {
+                double x = double.Parse(substrings[i + 1], CultureInfo.InvariantCulture);
+                double y1 = double.Parse(substrings[i + 2], CultureInfo.InvariantCulture);
+                double y2 = double.Parse(substrings[i + 3], CultureInfo.InvariantCulture);
+                double y = Math.Sqrt(Math.Pow(y1, 2) + Math.Pow(y2, 2));
                 pointsList.Add(x, y);
             }
             return pointsList;
@@ -162,32 +181,52 @@ namespace View
         /// <param name="e"></param>
         private void btDraw_Click(object sender, EventArgs e)
         {
-            // TODO: исправить перерисовку графика
             LoadNetlist(_circuit);
             RunAnalysis();
             GraphPane pane = zedGraphControl.GraphPane;
-            pane.XAxis.Type = AxisType.Log;
+            
+            pane.YAxis.MajorGrid.IsZeroLine = false;
+            pane.XAxis.MajorGrid.IsVisible = true;
+            pane.XAxis.MajorGrid.DashOff = 0;
+            pane.XAxis.MinorGrid.IsVisible = true;
+            pane.XAxis.MinorGrid.DashOff = 0;
+            pane.YAxis.MajorGrid.IsVisible = true;
+            pane.YAxis.MajorGrid.DashOff = 0;
+            pane.XAxis.IsAxisSegmentVisible = false;
             pane.CurveList.Clear();
-            zedGraphControl.AxisChange();
-            zedGraphControl.Invalidate();
             string[] output = plotNodesTB.Text.Split(',');
-            // TODO: проверять выходные данные (дб или гц)
             for (int i = 0; i < output.Length; i++)
             {
-                // TODO: проверить, сработал ли callback
-                // TODO: обратобка ошибок
+                _text = "";
                 Ngspice.ngSpice_Command("print " + output[i]);
-                PointPairList points = GetPointPairs();
-                Random randomGen = new Random();
-                KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
-                KnownColor randomColorName = names[randomGen.Next(names.Length)];
-                Color randomColor = Color.FromKnownColor(randomColorName);
-                LineItem curve = pane.AddCurve(output[i], points, randomColor, SymbolType.None);
-                curve.Line.IsSmooth = true;
+                if (_text != "")
+                {
+                    PointPairList points;
+                    if (Regex.IsMatch(output[i], "vdb"))
+                    {
+                        points = GetPointPairsDB();
+                        pane.XAxis.Type = AxisType.Log;
+                    }
+                    else
+                    {
+                        points = GetPointPairsHZ();
+                        pane.XAxis.Type = AxisType.Linear;
+                    }
+                    Random randomGen = new Random();
+                    KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+                    KnownColor randomColorName = names[randomGen.Next(names.Length)];
+                    Color randomColor = Color.FromKnownColor(randomColorName);
+                    LineItem curve = pane.AddCurve(output[i], points, randomColor, SymbolType.None);
+                    curve.Line.IsSmooth = true;
+                }
+                else
+                {
+                    MessageBox.Show("Graph didn't plot. Check parameters and try again.", "Warning",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             zedGraphControl.AxisChange();
             zedGraphControl.Invalidate();
-            pane.YAxis.IsVisible = true;
         }
 
         private void TB_Enter(object sender, EventArgs e)

@@ -12,9 +12,19 @@ namespace View
         /// <summary>
         /// Метод для проверки данных
         /// </summary>
-        public static bool InputDataValidating(string text)
+        public static bool InputIntValidating(string text)
         {
             Regex regex = new Regex("^[0-9]+$");
+            if (regex.IsMatch(text) != true)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool InputDoubleValidating(string text)
+        {
+            Regex regex = new Regex(@"^[0-9]*(?:\.[0-9]*)?$");
             if (regex.IsMatch(text) != true)
             {
                 return false;

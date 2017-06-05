@@ -3,6 +3,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace View
 {
@@ -141,7 +142,8 @@ namespace View
             {
                 int a = int.Parse(_nodeIn.Text);
                 int b = int.Parse(_nodeOut.Text);
-                if (InputDataController.InputDataValidating(((TextBox)sender).Text)
+                if (((InputDataController.InputIntValidating(((TextBox)sender).Text))
+                    ||(InputDataController.InputDoubleValidating(((TextBox)sender).Text)))
                 && (a != b) && ((a < b) || (b == 0)))
                 {
                     e.Cancel = false;
@@ -180,7 +182,7 @@ namespace View
             {
                 if (((TextBox)sender).Name == "_elementValue")
                 {
-                    _object.Value = double.Parse(((TextBox)sender).Text);
+                    _object.Value = double.Parse(((TextBox)sender).Text, CultureInfo.InvariantCulture);
                 }
                 if (((TextBox)sender).Name == "_nodeIn")
                 {
@@ -212,7 +214,9 @@ namespace View
         /// </summary>
         private void TextBoxTextChanged(object sender, EventArgs e)
         {
-            if ((!InputDataController.InputDataValidating(((TextBox)sender).Text))&&(((TextBox)sender).Text != ""))
+            if ((!((InputDataController.InputIntValidating(((TextBox)sender).Text))
+                ||(InputDataController.InputDoubleValidating(((TextBox)sender).Text))))
+                &&(((TextBox)sender).Text != ""))
             {
                 MessageBox.Show("Invalid data. Please, try again. Only numeric can be entered.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

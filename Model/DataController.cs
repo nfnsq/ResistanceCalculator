@@ -19,7 +19,7 @@ namespace Model
         /// <returns></returns>
         public static bool Validating(double value)
         {
-            double min = 10;
+            double min = 0;
             double max = 22E+6;
             if ((value >= min) && (value <= max))
             {
