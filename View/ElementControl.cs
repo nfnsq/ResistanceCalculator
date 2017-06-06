@@ -142,9 +142,7 @@ namespace View
             {
                 int a = int.Parse(_nodeIn.Text);
                 int b = int.Parse(_nodeOut.Text);
-                if (((InputDataController.InputIntValidating(((TextBox)sender).Text))
-                    ||(InputDataController.InputDoubleValidating(((TextBox)sender).Text)))
-                && (a != b) && ((a < b) || (b == 0)))
+                if ((a != b) && ((a < b) || (b == 0)))
                 {
                     e.Cancel = false;
                 }
@@ -212,16 +210,15 @@ namespace View
         /// <summary>
         /// Обработчик при изменении значения свойства Text элемента TextBox
         /// </summary>
-        private void TextBoxTextChanged(object sender, EventArgs e)
+        private void DoubleTextChanged(object sender, EventArgs e)
         {
-            if ((!((InputDataController.InputIntValidating(((TextBox)sender).Text))
-                ||(InputDataController.InputDoubleValidating(((TextBox)sender).Text))))
-                &&(((TextBox)sender).Text != ""))
-            {
-                MessageBox.Show("Invalid data. Please, try again. Only numeric can be entered.",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ((TextBox)sender).Text = "";
-            }
+            InputDataController.DoubleTextBoxChanged(sender, e);
+            ObjectChanged?.Invoke("");
+        }
+
+        private void IntTextChanged(object sender, EventArgs e)
+        {
+            InputDataController.IntTextBoxChanged(sender, e);
             ObjectChanged?.Invoke("");
         }
     }

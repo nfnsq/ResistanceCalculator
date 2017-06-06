@@ -10,6 +10,9 @@ using ZedGraph;
 
 namespace View
 {
+    /// <summary>
+    /// Форма для анализа частотных характеристик
+    /// </summary>
     public partial class AC_Analysis : Form
     {
         private static string _text;
@@ -90,7 +93,6 @@ namespace View
         /// </summary>
         private void RunAnalysis()
         {
-            // TODO: проверка данных
             Ngspice.ngSpice_Command("ac " + 
                 variationCB.Text + " " +
                 numberOfPointsTB.Text + " " +
@@ -212,11 +214,8 @@ namespace View
                         points = GetPointPairsHZ();
                         pane.XAxis.Type = AxisType.Linear;
                     }
-                    Random randomGen = new Random();
-                    KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
-                    KnownColor randomColorName = names[randomGen.Next(names.Length)];
-                    Color randomColor = Color.FromKnownColor(randomColorName);
-                    LineItem curve = pane.AddCurve(output[i], points, randomColor, SymbolType.None);
+
+                    LineItem curve = pane.AddCurve(output[i], points, GetColor(), SymbolType.None);
                     curve.Line.IsSmooth = true;
                 }
                 else
@@ -229,15 +228,54 @@ namespace View
             zedGraphControl.Invalidate();
         }
 
-        private void TB_Enter(object sender, EventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        private void TextBoxEnter(object sender, EventArgs e)
         {
             ((TextBox)sender).Text = "";
             ((TextBox)sender).ForeColor = SystemColors.WindowText;
         }
 
-        private void cancelBT_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        private void cancelBTClick(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void DoubleTextChanged(object sender, EventArgs e)
+        {
+            InputDataController.DoubleTextBoxChanged(sender, e);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void IntTextChanged(object sender, EventArgs e)
+        {
+            InputDataController.IntTextBoxChanged(sender, e);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private Color GetColor()
+        {
+            Color randomColor;
+            do
+            {
+                Random randomGen = new Random();
+                KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+                KnownColor randomColorName = names[randomGen.Next(names.Length)];
+                randomColor = Color.FromKnownColor(randomColorName);
+            }
+            while (randomColor.GetSaturation() < 0.5);
+            return randomColor;
         }
     }
 }

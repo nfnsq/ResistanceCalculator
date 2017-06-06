@@ -58,7 +58,7 @@
             this._elementValue.Name = "_elementValue";
             this._elementValue.Size = new System.Drawing.Size(61, 20);
             this._elementValue.TabIndex = 1;
-            this._elementValue.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
+            this._elementValue.TextChanged += new System.EventHandler(this.DoubleTextChanged);
             this._elementValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxValidating);
             this._elementValue.Validated += new System.EventHandler(this.TextBoxValidated);
             // 
@@ -69,7 +69,7 @@
             this._nodeIn.Name = "_nodeIn";
             this._nodeIn.Size = new System.Drawing.Size(18, 20);
             this._nodeIn.TabIndex = 2;
-            this._nodeIn.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
+            this._nodeIn.TextChanged += new System.EventHandler(this.IntTextChanged);
             this._nodeIn.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxValidating);
             this._nodeIn.Validated += new System.EventHandler(this.TextBoxValidated);
             // 
@@ -98,7 +98,7 @@
             this._nodeOut.Name = "_nodeOut";
             this._nodeOut.Size = new System.Drawing.Size(18, 20);
             this._nodeOut.TabIndex = 5;
-            this._nodeOut.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
+            this._nodeOut.TextChanged += new System.EventHandler(this.IntTextChanged);
             this._nodeOut.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxValidating);
             this._nodeOut.Validated += new System.EventHandler(this.TextBoxValidated);
             // 

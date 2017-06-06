@@ -60,9 +60,8 @@
             // 
             // settingsGB
             // 
-            this.settingsGB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.settingsGB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.settingsGB.Controls.Add(this.plotNodesTB);
             this.settingsGB.Controls.Add(this.plotLB);
             this.settingsGB.Controls.Add(this.analysisGB);
@@ -71,7 +70,7 @@
             this.settingsGB.Controls.Add(this.btDraw);
             this.settingsGB.Location = new System.Drawing.Point(12, 13);
             this.settingsGB.Name = "settingsGB";
-            this.settingsGB.Size = new System.Drawing.Size(357, 281);
+            this.settingsGB.Size = new System.Drawing.Size(357, 280);
             this.settingsGB.TabIndex = 0;
             this.settingsGB.TabStop = false;
             // 
@@ -83,7 +82,7 @@
             this.plotNodesTB.Size = new System.Drawing.Size(237, 20);
             this.plotNodesTB.TabIndex = 24;
             this.plotNodesTB.Text = "v(1), vdb(2), v(1, 2)";
-            this.plotNodesTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.plotNodesTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // plotLB
             // 
@@ -109,7 +108,7 @@
             this.analysisGB.Controls.Add(this.fstartTB);
             this.analysisGB.Location = new System.Drawing.Point(6, 97);
             this.analysisGB.Name = "analysisGB";
-            this.analysisGB.Size = new System.Drawing.Size(343, 75);
+            this.analysisGB.Size = new System.Drawing.Size(343, 74);
             this.analysisGB.TabIndex = 22;
             this.analysisGB.TabStop = false;
             this.analysisGB.Text = "Analysis";
@@ -134,7 +133,8 @@
             this.numberOfPointsTB.Size = new System.Drawing.Size(50, 20);
             this.numberOfPointsTB.TabIndex = 18;
             this.numberOfPointsTB.Text = "10";
-            this.numberOfPointsTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.numberOfPointsTB.TextChanged += new System.EventHandler(this.IntTextChanged);
+            this.numberOfPointsTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // numberOfPointsLB
             // 
@@ -170,7 +170,8 @@
             this.fstopTB.Size = new System.Drawing.Size(78, 20);
             this.fstopTB.TabIndex = 20;
             this.fstopTB.Text = "100";
-            this.fstopTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.fstopTB.TextChanged += new System.EventHandler(this.DoubleTextChanged);
+            this.fstopTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // fstartLB
             // 
@@ -188,7 +189,8 @@
             this.fstartTB.Size = new System.Drawing.Size(78, 20);
             this.fstartTB.TabIndex = 19;
             this.fstartTB.Text = "0.01";
-            this.fstartTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.fstartTB.TextChanged += new System.EventHandler(this.DoubleTextChanged);
+            this.fstartTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // sourceGB
             // 
@@ -205,7 +207,7 @@
             this.sourceGB.Controls.Add(this.phaseLB);
             this.sourceGB.Location = new System.Drawing.Point(6, 19);
             this.sourceGB.Name = "sourceGB";
-            this.sourceGB.Size = new System.Drawing.Size(343, 72);
+            this.sourceGB.Size = new System.Drawing.Size(343, 71);
             this.sourceGB.TabIndex = 21;
             this.sourceGB.TabStop = false;
             this.sourceGB.Text = "Source";
@@ -218,7 +220,8 @@
             this.nodeInTB.Size = new System.Drawing.Size(31, 20);
             this.nodeInTB.TabIndex = 5;
             this.nodeInTB.Text = "1";
-            this.nodeInTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.nodeInTB.TextChanged += new System.EventHandler(this.IntTextChanged);
+            this.nodeInTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // magnitudeTB
             // 
@@ -227,7 +230,7 @@
             this.magnitudeTB.Size = new System.Drawing.Size(78, 20);
             this.magnitudeTB.TabIndex = 7;
             this.magnitudeTB.Text = "1";
-            this.magnitudeTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.magnitudeTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // nodeOutTB
             // 
@@ -237,7 +240,8 @@
             this.nodeOutTB.Size = new System.Drawing.Size(31, 20);
             this.nodeOutTB.TabIndex = 6;
             this.nodeOutTB.Text = "0";
-            this.nodeOutTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.nodeOutTB.TextChanged += new System.EventHandler(this.IntTextChanged);
+            this.nodeOutTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // phaseTB
             // 
@@ -246,7 +250,7 @@
             this.phaseTB.Size = new System.Drawing.Size(78, 20);
             this.phaseTB.TabIndex = 8;
             this.phaseTB.Text = "0";
-            this.phaseTB.Enter += new System.EventHandler(this.TB_Enter);
+            this.phaseTB.Enter += new System.EventHandler(this.TextBoxEnter);
             // 
             // nodeInLB
             // 
@@ -292,7 +296,7 @@
             this.cancelBT.TabIndex = 11;
             this.cancelBT.Text = "Cancel";
             this.cancelBT.UseVisualStyleBackColor = true;
-            this.cancelBT.Click += new System.EventHandler(this.cancelBT_Click);
+            this.cancelBT.Click += new System.EventHandler(this.cancelBTClick);
             // 
             // btDraw
             // 
@@ -306,8 +310,7 @@
             // 
             // zedGraphControl
             // 
-            this.zedGraphControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.zedGraphControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.zedGraphControl.IsAutoScrollRange = true;
             this.zedGraphControl.IsShowCursorValues = true;
@@ -321,14 +324,14 @@
             this.zedGraphControl.ScrollMinX = 0D;
             this.zedGraphControl.ScrollMinY = 0D;
             this.zedGraphControl.ScrollMinY2 = 0D;
-            this.zedGraphControl.Size = new System.Drawing.Size(408, 270);
+            this.zedGraphControl.Size = new System.Drawing.Size(408, 269);
             this.zedGraphControl.TabIndex = 0;
             // 
             // AC_Analysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 299);
+            this.ClientSize = new System.Drawing.Size(792, 298);
             this.Controls.Add(this.settingsGB);
             this.Controls.Add(this.zedGraphControl);
             this.Name = "AC_Analysis";
