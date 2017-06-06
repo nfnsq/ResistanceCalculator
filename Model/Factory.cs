@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    //TODO: XML комментарии(done)
-    //TODO: не понятно назначение этой сущности(done)
     /// <summary>
     /// Сущность абстрактная фабрика
     /// </summary>

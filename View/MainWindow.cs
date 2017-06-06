@@ -332,11 +332,34 @@ namespace View
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             // TODO: проверка наличия нулевого узла
-            else
+            else if (CheckZeroNode())
             {
                 AC_Analysis acWindow = new AC_Analysis(_circuit);
                 acWindow.ShowDialog();
             }
+            else
+            {
+                MessageBox.Show("Circuit should have at least one zero node.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+
+        /// <summary>
+        /// Метод проверяет присутсвие узла 0 в цепи
+        /// </summary>
+        private bool CheckZeroNode()
+        {
+            bool zero = false;
+            for (int i = 0; i < _circuit.Nodes.Count; i++)
+            {
+                if ((_circuit.Nodes[i].Item1 == 0)
+                    || (_circuit.Nodes[i].Item2 == 0))
+                {
+                    zero |= true;
+                }
+            }
+            return zero;
         }
     }
 }

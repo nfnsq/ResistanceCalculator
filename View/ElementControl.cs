@@ -116,10 +116,9 @@ namespace View
         {
             try
             {
-                // BUG: при малых value не создает элемент
                 int key = _elementKind.SelectedIndex;
                 Factory factory = Factory.GetFactory(key);
-                double value = double.Parse(_elementValue.Text);
+                double value = double.Parse(_elementValue.Text, CultureInfo.InvariantCulture);
                 _object = factory.CreateElement(value); ;
                 _in = int.Parse(_nodeIn.Text);
                 _out = int.Parse(_nodeOut.Text);
@@ -148,11 +147,7 @@ namespace View
                 else
                 {
                     e.Cancel = true;
-                    if (((TextBox)sender).Text == "")
-                    {
-                        MessageBox.Show("It's empty! Should be filled.", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    
                     if ((a == b)||(a > b))
                     {
                         MessageBox.Show("In should be less than Out", "Error",
@@ -163,8 +158,16 @@ namespace View
             }
             catch
             {
-                MessageBox.Show("Parsing failure.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (((TextBox)sender).Text == "")
+                {
+                    MessageBox.Show("It's empty! Should be filled.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Parsing failure.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 e.Cancel = true;
             }
 

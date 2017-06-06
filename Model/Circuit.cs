@@ -198,7 +198,6 @@ namespace Model
             }
             catch
             {
-                //TODO: Плохо показывать сообщения прямо из модели
                 zEq = Complex.Zero;
             }
             return zEq;
