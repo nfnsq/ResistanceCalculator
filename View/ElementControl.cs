@@ -208,7 +208,7 @@ namespace View
         }
 
         /// <summary>
-        /// Обработчик при изменении значения свойства Text элемента TextBox
+        /// Обработчик события изменения значения свойства Text элемента TextBox
         /// </summary>
         private void DoubleTextChanged(object sender, EventArgs e)
         {
@@ -216,6 +216,9 @@ namespace View
             ObjectChanged?.Invoke("");
         }
 
+        /// <summary>
+        /// Обработчик события изменения значения свойства Text элемента TextBox
+        /// </summary>
         private void IntTextChanged(object sender, EventArgs e)
         {
             InputDataController.IntTextBoxChanged(sender, e);

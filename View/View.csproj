@@ -78,6 +78,7 @@
     <Compile Include="ElementControl.Designer.cs">
       <DependentUpon>ElementControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Graph.cs" />
     <Compile Include="InputDataController.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
