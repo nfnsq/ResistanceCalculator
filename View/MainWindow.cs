@@ -1,14 +1,9 @@
 ﻿using Model;
 using System;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.Data;
-using System.Numerics;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Threading;
+using System.Numerics;
+using System.Windows.Forms;
 
 namespace View
 {
@@ -336,6 +331,7 @@ namespace View
                 MessageBox.Show("Circuit should have at least one element.", "Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            // TODO: проверка наличия нулевого узла
             else
             {
                 AC_Analysis acWindow = new AC_Analysis(_circuit);

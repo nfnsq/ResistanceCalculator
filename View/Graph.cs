@@ -8,6 +8,9 @@ using ZedGraph;
 
 namespace View
 {
+    /// <summary>
+    /// Сущность для описания графика
+    /// </summary>
     internal class Graph
     {
         /// <summary>
@@ -15,10 +18,17 @@ namespace View
         /// </summary>
         /// <param name="zedGraphControl">Компонент ZedGraphControl, в котором нужно нарисовать график</param>
         /// <param name="output">Список того, что нужно отобразить на графике</param>
-        public void DrawGraph(ZedGraphControl zedGraphControl, string[] output)
+        public void DrawGraph(ZedGraphControl zedGraphControl, string[] output, int axisType)
         {
             GraphPane pane = zedGraphControl.GraphPane;
-
+            if (axisType == 1)
+            {
+                pane.XAxis.Type = AxisType.Linear;
+            }
+            else
+            {
+                pane.XAxis.Type = AxisType.Log;
+            }
             pane.YAxis.MajorGrid.IsZeroLine = false;
             pane.XAxis.MajorGrid.IsVisible = true;
             pane.XAxis.MajorGrid.DashOff = 0;
@@ -39,12 +49,10 @@ namespace View
                     if (Regex.IsMatch(output[i], "vdb"))
                     {
                         points = GetPointPairsDB();
-                        pane.XAxis.Type = AxisType.Log;
                     }
                     else
                     {
                         points = GetPointPairsHZ();
-                        pane.XAxis.Type = AxisType.Linear;
                     }
 
                     LineItem curve = pane.AddCurve(output[i], points, GetRandomColor(), SymbolType.None);
@@ -77,6 +85,7 @@ namespace View
             }
             return pointsList;
         }
+
         /// <summary>
         /// Метод получает данные для прорисовки графика
         /// </summary>
@@ -96,6 +105,7 @@ namespace View
             }
             return pointsList;
         }
+
         /// <summary>
         /// Метод генерирует рандомный цвет
         /// </summary>
@@ -109,7 +119,8 @@ namespace View
                 KnownColor randomColorName = names[randomGen.Next(names.Length)];
                 randomColor = Color.FromKnownColor(randomColorName);
             }
-            while (randomColor.GetSaturation() < 0.5);
+            while ((randomColor.GetSaturation() > 0.5)
+            &&(randomColor.GetBrightness() > 0.5));
             return randomColor;
         }
     }

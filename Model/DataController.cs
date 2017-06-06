@@ -21,7 +21,7 @@ namespace Model
         {
             double min = 0;
             double max = 22E+6;
-            if ((value >= min) && (value <= max))
+            if ((value > min) && (value <= max))
             {
                 return true;
             }

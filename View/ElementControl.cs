@@ -1,6 +1,5 @@
 ﻿using Model;
 using System;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Globalization;
@@ -117,6 +116,7 @@ namespace View
         {
             try
             {
+                // BUG: при малых value не создает элемент
                 int key = _elementKind.SelectedIndex;
                 Factory factory = Factory.GetFactory(key);
                 double value = double.Parse(_elementValue.Text);
@@ -124,7 +124,6 @@ namespace View
                 _in = int.Parse(_nodeIn.Text);
                 _out = int.Parse(_nodeOut.Text);
                 ObjectChanged?.Invoke("Element type changed.");
-
             }
             catch
             {
@@ -197,6 +196,7 @@ namespace View
                 if (_elementValue.Text == "")
                 {
                     _object.Value = 0;
+                    ObjectChanged?.Invoke("");
                 }
                 else
                 {

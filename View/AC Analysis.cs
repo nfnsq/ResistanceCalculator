@@ -99,8 +99,54 @@ namespace View
                 fstartTB.Text + " " +
                 fstopTB.Text);
         }
-
         
+        /// <summary>
+        /// Обработчик нажатия кнопки btDraw
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btDraw_Click(object sender, EventArgs e)
+        {
+            LoadNetlist(_circuit);
+            RunAnalysis();
+            string[] output = plotNodesTB.Text.Split(',');
+            Graph graph = new Graph();
+            graph.DrawGraph(zedGraphControl, output, variationCB.SelectedIndex);
+        }
+
+        /// <summary>
+        /// Обработчик события нажатия на поле TextBox
+        /// </summary>
+        private void TextBoxEnter(object sender, EventArgs e)
+        {
+            ((TextBox)sender).Text = "";
+            ((TextBox)sender).ForeColor = SystemColors.WindowText;
+        }
+
+        /// <summary>
+        /// Обработчик события нажатия на кнопку CancelBT
+        /// </summary>
+        private void cancelBTClick(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        /// <summary>
+        /// Обработчик события изменения значения свойства Text элемента TextBox
+        /// </summary>
+        private void DoubleTextChanged(object sender, EventArgs e)
+        {
+            InputDataController.DoubleTextBoxChanged(sender, e);
+        }
+
+        /// <summary>
+        /// Обработчик события изменения значения свойства Text элемента TextBox
+        /// </summary>
+        private void IntTextChanged(object sender, EventArgs e)
+        {
+            InputDataController.IntTextBoxChanged(sender, e);
+        }
+
 
         private static int cbSendChar(IntPtr param0, int param1, IntPtr param2)
         {
@@ -139,53 +185,6 @@ namespace View
         private static int cbBGThreadRunnig([MarshalAs(UnmanagedType.I1)] bool param0, int param1, IntPtr param2)
         {
             return 1;
-        }
-
-        /// <summary>
-        /// Обработчик нажатия кнопки btDraw
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btDraw_Click(object sender, EventArgs e)
-        {
-            LoadNetlist(_circuit);
-            RunAnalysis();
-            string[] output = plotNodesTB.Text.Split(',');
-            Graph graph = new Graph();
-            graph.DrawGraph(zedGraphControl, output);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void TextBoxEnter(object sender, EventArgs e)
-        {
-            ((TextBox)sender).Text = "";
-            ((TextBox)sender).ForeColor = SystemColors.WindowText;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void cancelBTClick(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        /// <summary>
-        /// Обработчик события изменения значения свойства Text элемента TextBox
-        /// </summary>
-        private void DoubleTextChanged(object sender, EventArgs e)
-        {
-            InputDataController.DoubleTextBoxChanged(sender, e);
-        }
-
-        /// <summary>
-        /// Обработчик события изменения значения свойства Text элемента TextBox
-        /// </summary>
-        private void IntTextChanged(object sender, EventArgs e)
-        {
-            InputDataController.IntTextBoxChanged(sender, e);
         }
     }
 }
