@@ -36,7 +36,7 @@ namespace View
             }
             set
             {
-                if (value >= 0)
+                if (value > 0)
                 {
                     _in = value;
                 }
@@ -138,22 +138,25 @@ namespace View
         {
             try
             {
-                int a = int.Parse(_nodeIn.Text);
-                int b = int.Parse(_nodeOut.Text);
-                if ((a != b) && ((a < b) || (b == 0)))
+                if (((TextBox)sender).Name != "_elementValue")
                 {
-                    e.Cancel = false;
-                }
-                else
-                {
-                    e.Cancel = true;
-                    
-                    if ((a == b)||(a > b))
+                    int a = int.Parse(_nodeIn.Text);
+                    int b = int.Parse(_nodeOut.Text);
+                    if ((a != b) && ((a < b) || (b == 0)))
                     {
-                        MessageBox.Show("In should be less than Out", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        e.Cancel = false;
                     }
-                    ((TextBox)sender).Text = "";
+                    else
+                    {
+                        e.Cancel = true;
+
+                        if ((a == b) || (a > b))
+                        {
+                            MessageBox.Show("In should be less than Out", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        ((TextBox)sender).Text = "";
+                    }
                 }
             }
             catch

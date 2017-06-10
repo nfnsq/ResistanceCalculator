@@ -69,7 +69,7 @@ namespace View
         }
 
         /// <summary>
-        /// Метод получает данные для прорисовки графика
+        /// Метод получает данные для прорисовки графика DB
         /// </summary>
         /// <returns></returns>
         private PointPairList GetPointPairsDB()
@@ -87,7 +87,7 @@ namespace View
         }
 
         /// <summary>
-        /// Метод получает данные для прорисовки графика
+        /// Метод получает данные для прорисовки графика HZ
         /// </summary>
         /// <returns></returns>
         private PointPairList GetPointPairsHZ()

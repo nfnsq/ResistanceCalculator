@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Model
 {
     /// <summary>
-    /// Сущность для создания и расчета матрицы инциденцийы
+    /// Сущность для создания и расчета матрицы инциденций
     /// </summary>
     public class IncidenceMatrix
     {
@@ -32,7 +32,8 @@ namespace Model
                     {
                         _matrix[i].Add(1);
                     }
-                    else if (nodes[j].Item2== i + 1)
+                    else if ((nodes[j].Item2== i + 1)
+                        || (nodes[j].Item2 == 0))
                     {
                         _matrix[i].Add(-1);
                     }
@@ -103,7 +104,7 @@ namespace Model
         private int QuantityInRow(int row, List<List<int>> matrix)
         {
             int quantity = 0;
-            for (int i = 0; i < matrix[row].Count; i++)
+            for (int i = 0; i < matrix.Count; i++)
             {
                 if (matrix[i][row] != 0)
                     quantity++;

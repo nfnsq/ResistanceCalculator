@@ -23,13 +23,14 @@ namespace UnitTests.ModelTests
         [TestCase(100 / Math.PI, 100, 100, 0, TestName = "100 / Math.PI, 100,")]
         [TestCase(1000 / Math.PI, 1000, 1000, 0, TestName = "1000 / Math.PI, 1000")]
         [TestCase(50000 / Math.PI, 50000, 50000, 0, TestName = "50000 / Math.PI, 50000,")]
-        public void InductorZ(double frequency, double iValue, double real, double imaginary)
+        public void InductorZ(double frequency, double rValue, double real, double imaginary)
         {
             Complex result = new Complex(real, imaginary);
 
-            Resistor capacitor = new Resistor("R", iValue);
+            Factory f = Factory.GetFactory('R');
+            Resistor resistor = (Resistor)f.CreateElement(rValue);
 
-            Complex z = capacitor.CalculateZ(frequency);
+            Complex z = resistor.CalculateZ(frequency);
 
             Assert.AreEqual(result, z);
         }

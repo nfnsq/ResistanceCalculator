@@ -18,7 +18,7 @@ namespace View
         private Circuit _circuit;
         private List<double> _frequences = new List<double>();
         private List<ElementControl> _elementContolList = new List<ElementControl>();
-        
+
         /// <summary>
         /// Инициализация главного окна
         /// </summary>
@@ -31,7 +31,7 @@ namespace View
             _circuit.CircuitChanged += Circuit_CircuitChanged;
             _circuit.InvalidNodes += Circuit_InvalidMatrix;
 
-                    }
+        }
 
         /// <summary>
         /// Обработчик события проверки матрицы
@@ -89,6 +89,7 @@ namespace View
             for (int i = 0; i < _elementContolList.Count; i++)
             {
                 _circuit.Elements[i] = _elementContolList[i].Object;
+                _circuit.Elements[i].Name = _circuit.Elements[i].Name[0] + (i + 1).ToString();
                 _circuit.Nodes[i] = new Tuple<int, int>(_elementContolList[i].In, _elementContolList[i].Out);
             }
             Circuit_CircuitChanged("");
@@ -99,11 +100,14 @@ namespace View
         /// </summary>
         private void RemoveElement()
         {
-            int index = _circuit.Elements.Count - 1;
-            _circuit.Elements.RemoveAt(index);
-            _circuit.Nodes.Remove(index);
-            _elementContolList.RemoveAt(index);
-            _elementsPanel.Controls.RemoveAt(index);
+            if (_circuit.Elements.Count != 0)
+            {
+                int index = _circuit.Elements.Count - 1;
+                _circuit.Elements.RemoveAt(index);
+                _circuit.Nodes.Remove(index);
+                _elementContolList.RemoveAt(index);
+                _elementsPanel.Controls.RemoveAt(index);
+            }
         }
 
         /// <summary>
@@ -121,6 +125,7 @@ namespace View
                     _frequences[i] = double.Parse(row.Cells[0].FormattedValue.ToString());
                 }
             }
+
             Complex[] z = _circuit.CalculateZ(_frequences);
 
             foreach (DataGridViewRow row in _dataGridView.Rows)
@@ -229,6 +234,7 @@ namespace View
             _elementContolList.Clear();
             _circuit.Elements.Clear();
             _circuit.Nodes.Clear();
+            Circuit_CircuitChanged("clear");
         }
 
         /// <summary>
@@ -311,11 +317,11 @@ namespace View
                 if (_elementContolList.Count != 0)
                 {
                     int index = _elementContolList.Count - 1;
-                    lastNode = _circuit.Nodes[index].Item2;
+                    lastNode = GetMaxNode(_circuit);
                 }
                 if (count > _circuit.Elements.Count)
                 {
-                    AddElement("R", 10, lastNode, lastNode + 1);
+                    AddElement("R", 10, lastNode, 0);
                 }
                 else
                 {
@@ -331,7 +337,6 @@ namespace View
                 MessageBox.Show("Circuit should have at least one element.", "Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            // TODO: проверка наличия нулевого узла
             else if (CheckZeroNode())
             {
                 AC_Analysis acWindow = new AC_Analysis(_circuit);
@@ -346,20 +351,37 @@ namespace View
         }
 
         /// <summary>
-        /// Метод проверяет присутсвие узла 0 в цепи
+        /// Метод проверяет присутствие узла 0 в цепи
         /// </summary>
         private bool CheckZeroNode()
         {
             bool zero = false;
+            int maxNode = GetMaxNode(_circuit);
             for (int i = 0; i < _circuit.Nodes.Count; i++)
             {
-                if ((_circuit.Nodes[i].Item1 == 0)
-                    || (_circuit.Nodes[i].Item2 == 0))
+                if ((_circuit.Nodes[i].Item2 == 0) 
+                    && (_circuit.Nodes[i].Item1 == maxNode))
                 {
                     zero |= true;
                 }
             }
             return zero;
+        }
+
+        /// <summary>
+        /// Метод получает наибольшее значение узла
+        /// </summary>
+        /// <param name="circuit"></param>
+        /// <returns></returns>
+        private int GetMaxNode(Circuit circuit)
+        {
+            int max = 0;
+            for (int i = 0; i < circuit.Nodes.Count; i++)
+            {
+                max = (circuit.Nodes[i].Item2 > max) ? circuit.Nodes[i].Item2 : max;
+                max = (circuit.Nodes[i].Item1 > max) ? circuit.Nodes[i].Item1 : max;
+            }
+            return max;
         }
     }
 }

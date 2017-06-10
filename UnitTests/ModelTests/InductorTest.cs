@@ -26,9 +26,10 @@ namespace UnitTests.ModelTests
         {
             Complex result = new Complex(real, imaginary);
 
-            Inductor capacitor = new Inductor("L", iValue);
+            Factory f = Factory.GetFactory('L');
+            Inductor inductor = (Inductor)f.CreateElement(iValue);
 
-            Complex z = capacitor.CalculateZ(frequency);
+            Complex z = inductor.CalculateZ(frequency);
 
             Assert.AreEqual(result, z);
         }

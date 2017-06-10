@@ -73,6 +73,7 @@ namespace Model
         public Complex[] CalculateZ(List<double> frequencies)
         {
             Complex[] result = new Complex[frequencies.Count];
+            
             //локальная переменная для списка элементов
             List<Complex> z = new List<Complex>();
             try
@@ -90,10 +91,23 @@ namespace Model
                         int rowCount = z.Count;
                         //получить размер столбцов
                         int columnCount = 0;
+                        bool zeroNode = false;
                         foreach (IElement elem in Elements)
                         {
                             if (_nodes[_elements.IndexOf(elem)].Item2 > columnCount)
+                            {
                                 columnCount = _nodes[_elements.IndexOf(elem)].Item2;
+                            }
+                            if (_nodes[_elements.IndexOf(elem)].Item1 > columnCount)
+                            {
+                                columnCount = _nodes[_elements.IndexOf(elem)].Item1;
+                            }
+                            if ((_nodes[_elements.IndexOf(elem)].Item2 == 0)
+                                &&(!zeroNode))
+                            {
+                                zeroNode = true;
+                                columnCount++;
+                            }
                         }
 
                         //создать и заполнить матрицу
@@ -131,16 +145,16 @@ namespace Model
                                     //поиск одинаковых строк в матрице
                                     for (int k = i + 1; k < z.Count; k++)
                                     {
-                                        bool isEqual = true;
+                                        bool isEqual = false;
                                         for (int j = 0; j < columnCount; j++)
                                         {
                                             if (incidenceMatrix.Matrix[j][i] == incidenceMatrix.Matrix[j][k])
                                             {
-                                                isEqual = isEqual && true;
+                                                isEqual = isEqual || true;
                                             }
                                             else
                                             {
-                                                isEqual = isEqual && false;
+                                                isEqual = isEqual || false;
                                             }
                                         }
                                         if (isEqual)

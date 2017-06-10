@@ -1,15 +1,14 @@
 ﻿using Model;
 using System;
 using System.Drawing;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using ZedGraph;
 
 namespace View
 {
+    // BUG: не рассчитывает еали присутсвуют параллельные катушки и последовательные конденсаторы
     /// <summary>
     /// Форма для анализа частотных характеристик
     /// </summary>
@@ -70,13 +69,43 @@ namespace View
 
             var nodes = circuit.Nodes;
             var elements = circuit.Elements;
+
+            
             foreach (IElement elem in elements)
             {
-                Ngspice.ngSpice_Command("circbyline " +
-                    elem.Name + " " +
-                    nodes[elements.IndexOf(elem)].Item1 + " " +
-                    nodes[elements.IndexOf(elem)].Item2 + " " +
-                    elem.Value);
+                if (Regex.IsMatch(elem.Name, "R"))
+                {
+                    Ngspice.ngSpice_Command("circbyline " +
+                         elem.Name + " " +
+                         nodes[elements.IndexOf(elem)].Item1 + " " +
+                         nodes[elements.IndexOf(elem)].Item2 + " " +
+                         elem.Value);
+                }
+                if (Regex.IsMatch(elem.Name, "C"))
+                {
+                    Ngspice.ngSpice_Command("circbyline rbogus" +
+                         elem.Name + " " +
+                         nodes[elements.IndexOf(elem)].Item1 + " " +
+                        nodes[elements.IndexOf(elem)].Item2 + " 9e12");
+                    Ngspice.ngSpice_Command("circbyline " +
+                         elem.Name + " " +
+                         nodes[elements.IndexOf(elem)].Item1 + " " +
+                         nodes[elements.IndexOf(elem)].Item2 + " " +
+                         elem.Value);
+                }
+                if (Regex.IsMatch(elem.Name, "L"))
+                {
+                    Ngspice.ngSpice_Command("circbyline rbogus" +
+                        elem.Name + " " + 
+                        nodes[elements.IndexOf(elem)].Item1 + " " +
+                        nodes[elements.IndexOf(elem)].Item1 + "a 1e-12");
+                    Ngspice.ngSpice_Command("circbyline " +
+                         elem.Name + " " +
+                         nodes[elements.IndexOf(elem)].Item1 + "a " +
+                         nodes[elements.IndexOf(elem)].Item2 + " " +
+                         elem.Value);
+                }
+
             }
             Ngspice.ngSpice_Command("circbyline vin " +
                 nodeInTB.Text + " " +

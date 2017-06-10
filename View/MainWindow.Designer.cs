@@ -47,7 +47,6 @@
             this._circuit5 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.analysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.transientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._countOfElementView)).BeginInit();
@@ -82,6 +81,7 @@
             this._countOfElementView.Enabled = false;
             this._countOfElementView.Location = new System.Drawing.Point(173, 19);
             this._countOfElementView.Name = "_countOfElementView";
+            this._countOfElementView.ReadOnly = true;
             this._countOfElementView.Size = new System.Drawing.Size(45, 20);
             this._countOfElementView.TabIndex = 4;
             this._countOfElementView.ValueChanged += new System.EventHandler(this.CountOfElementView_ValueChanged);
@@ -170,7 +170,7 @@
             this._circuit4,
             this._circuit5});
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadToolStripMenuItem.Text = "Load";
             // 
             // _circuit1
@@ -211,24 +211,17 @@
             // createToolStripMenuItem
             // 
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.createToolStripMenuItem.Text = "Create";
             this.createToolStripMenuItem.Click += new System.EventHandler(this.CreateCircuit);
             // 
             // analysisToolStripMenuItem
             // 
             this.analysisToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.transientToolStripMenuItem,
             this.aCToolStripMenuItem});
             this.analysisToolStripMenuItem.Name = "analysisToolStripMenuItem";
             this.analysisToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.analysisToolStripMenuItem.Text = "Analysis";
-            // 
-            // transientToolStripMenuItem
-            // 
-            this.transientToolStripMenuItem.Name = "transientToolStripMenuItem";
-            this.transientToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.transientToolStripMenuItem.Text = "Transient";
             // 
             // aCToolStripMenuItem
             // 
@@ -282,7 +275,6 @@
         private System.Windows.Forms.NumericUpDown _countOfElementView;
         private System.Windows.Forms.Panel _elementsPanel;
         private System.Windows.Forms.ToolStripMenuItem analysisToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem transientToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aCToolStripMenuItem;
     }
 }
