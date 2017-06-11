@@ -296,7 +296,7 @@
             this.cancelBT.TabIndex = 11;
             this.cancelBT.Text = "Cancel";
             this.cancelBT.UseVisualStyleBackColor = true;
-            this.cancelBT.Click += new System.EventHandler(this.cancelBTClick);
+            this.cancelBT.Click += new System.EventHandler(this.CancelBtClick);
             // 
             // btDraw
             // 

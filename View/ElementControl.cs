@@ -86,13 +86,12 @@ namespace View
             set
             {
                 _object = value;
-                //TODO: Дублируется в MainWindow (done)
                 if (_object != null)
                 {
                     _elementValue.Text = _object.Value.ToString();
                     _nodeIn.Text = _in.ToString();
                     _nodeOut.Text = _out.ToString();
-
+                    //TODO: Есть ощущение, что это не здесь должно быть. На вскидку убрал бы в фабрику, но пока мне такое решение не очень нравится.
                     if (_object.Name[0] == 'R')
                     {
                         _elementKind.SelectedIndex = 0;
@@ -183,6 +182,7 @@ namespace View
         {
             try
             {
+                //TODO: Плохая практика привязываться к именам, они имеют обыкновение меняться
                 if (((TextBox)sender).Name == "_elementValue")
                 {
                     _object.Value = double.Parse(((TextBox)sender).Text, CultureInfo.InvariantCulture);

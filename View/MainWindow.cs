@@ -52,8 +52,7 @@ namespace View
             IElement iElement = null;
             Factory factory = Factory.GetFactory(name[0]);
             iElement = factory.CreateElement(value);
-            //TODO: Насколько просто будет расширить вашу программу при добавлении новых наследников(done)
-            //TODO: от IElement(done)
+
             int index = _elementContolList.Count;
 
             iElement.Name = iElement.Name + (index + 1).ToString();
@@ -147,14 +146,7 @@ namespace View
             {
                 DataGridViewCell cell = ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex];
                 string text = cell.EditedFormattedValue.ToString();
-                if (InputDataController.TypeOfDoubleCheck(text))
-                {
-                    e.Cancel = false;
-                }
-                else
-                {
-                    e.Cancel = true;
-                }
+                e.Cancel = !InputDataController.TypeOfDoubleCheck(text);
             }
         }
 
@@ -362,7 +354,7 @@ namespace View
                 if ((_circuit.Nodes[i].Item2 == 0) 
                     && (_circuit.Nodes[i].Item1 == maxNode))
                 {
-                    zero |= true;
+                    zero = true;
                 }
             }
             return zero;

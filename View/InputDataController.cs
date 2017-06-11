@@ -72,8 +72,8 @@ namespace View
         /// </summary>
         private static bool TextValidating(string verifiableText, Regex regex)
         {
-            if (((regex.IsMatch(verifiableText) != true))
-                && (verifiableText != ""))
+            if (!regex.IsMatch(verifiableText)
+                && verifiableText != "")
             {
                 MessageBox.Show("Invalid data. Please, try again. Only numeric can be entered.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

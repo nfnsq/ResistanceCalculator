@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//TODO: Библиотеку лучше подключить с помощью NuGet, тогда она автоматически подтянится при компиляции. Сейчас не компилируется проект.
 using NUnit.Framework;
 using Model;
 using System.Numerics;

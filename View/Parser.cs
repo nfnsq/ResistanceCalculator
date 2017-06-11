@@ -17,8 +17,6 @@ namespace View
         {
             try
             {
-                string[] substrings;
-
                 var re = new Regex("stdout ");
                 stringFromLib = re.Replace(stringFromLib, "");
                 re = new Regex(",");
@@ -28,7 +26,7 @@ namespace View
                 stringFromLib = stringFromLib.Substring(index - 1);
 
                 char delimiter = '\t';
-                substrings = stringFromLib.Split(delimiter);
+                var substrings = stringFromLib.Split(delimiter);
 
                 return substrings;
             }

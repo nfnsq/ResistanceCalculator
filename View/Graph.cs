@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+//TODO: Не нашёл у меня ZedGraph и не смог скомпилироваться
 using ZedGraph;
 
 namespace View
@@ -119,8 +120,8 @@ namespace View
                 KnownColor randomColorName = names[randomGen.Next(names.Length)];
                 randomColor = Color.FromKnownColor(randomColorName);
             }
-            while ((randomColor.GetSaturation() > 0.5)
-            &&(randomColor.GetBrightness() > 0.5));
+            while ((randomColor.GetSaturation() > 0.5) 
+                && (randomColor.GetBrightness() > 0.5));
             return randomColor;
         }
     }

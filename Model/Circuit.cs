@@ -16,34 +16,12 @@ namespace Model
         /// <summary>
         /// Список элементов, входящих в электрическую цепь
         /// </summary>
-        private ObservableCollection<IElement> _elements;
-        public ObservableCollection<IElement> Elements
-        {
-            get
-            {
-                return _elements;
-            }
-            set
-            {
-                _elements = value;
-            }
-        }
+        public ObservableCollection<IElement> Elements { get; set; }
 
-        private Dictionary<int, Tuple<int, int>> _nodes;
         /// <summary>
         /// Словарь хранит номера узлов, к которым соединены элементы
         /// </summary>
-        public Dictionary<int, Tuple<int, int>> Nodes
-        {
-            get
-            {
-                return _nodes;
-            }
-            set
-            {
-                _nodes = value;
-            }
-        }
+        public Dictionary<int, Tuple<int, int>> Nodes { get; set; }
 
         /// <summary>
         /// Конструктор по умолчанию
@@ -94,15 +72,15 @@ namespace Model
                         bool zeroNode = false;
                         foreach (IElement elem in Elements)
                         {
-                            if (_nodes[_elements.IndexOf(elem)].Item2 > columnCount)
+                            if (Nodes[Elements.IndexOf(elem)].Item2 > columnCount)
                             {
-                                columnCount = _nodes[_elements.IndexOf(elem)].Item2;
+                                columnCount = Nodes[Elements.IndexOf(elem)].Item2;
                             }
-                            if (_nodes[_elements.IndexOf(elem)].Item1 > columnCount)
+                            if (Nodes[Elements.IndexOf(elem)].Item1 > columnCount)
                             {
-                                columnCount = _nodes[_elements.IndexOf(elem)].Item1;
+                                columnCount = Nodes[Elements.IndexOf(elem)].Item1;
                             }
-                            if ((_nodes[_elements.IndexOf(elem)].Item2 == 0)
+                            if ((Nodes[Elements.IndexOf(elem)].Item2 == 0)
                                 &&(!zeroNode))
                             {
                                 zeroNode = true;
@@ -111,7 +89,7 @@ namespace Model
                         }
 
                         //создать и заполнить матрицу
-                        IncidenceMatrix incidenceMatrix = new IncidenceMatrix(columnCount, rowCount, _nodes);
+                        IncidenceMatrix incidenceMatrix = new IncidenceMatrix(columnCount, rowCount, Nodes);
                         
                         //проверка на корректность матрицы
                         if (incidenceMatrix.IsCorrect(incidenceMatrix.Matrix, rowCount, columnCount))
